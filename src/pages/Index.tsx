@@ -43,36 +43,65 @@ export default function Index() {
     saveRefreshState(newCount, newIndex);
   };
 
-  // Inline timer
+  // Inline timer — wall-clock based so it survives screen lock
   const [showTimer, setShowTimer] = useState(false);
   const [timerMinutes, setTimerMinutes] = useState(10);
-  const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
+  const [timerEndTime, setTimerEndTime] = useState<number | null>(null);
   const [timerRunning, setTimerRunning] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
+  // Track elapsed when paused
+  const [pausedRemaining, setPausedRemaining] = useState<number | null>(null);
 
   const startTimer = () => {
-    setSecondsLeft(timerMinutes * 60);
+    const end = Date.now() + timerMinutes * 60 * 1000;
+    setTimerEndTime(end);
+    setPausedRemaining(null);
     setTimerRunning(true);
   };
 
   const stopTimer = useCallback(() => {
-    if (secondsLeft !== null) {
-      const elapsed = timerMinutes * 60 - secondsLeft;
-      if (elapsed >= 30) logSession(Math.round(elapsed / 60));
+    if (timerEndTime !== null) {
+      const totalMs = timerMinutes * 60 * 1000;
+      const remaining = pausedRemaining ?? Math.max(0, timerEndTime - Date.now());
+      const elapsedSec = (totalMs - remaining * 1000) / 1000;
+      if (elapsedSec >= 30) logSession(Math.round(elapsedSec / 60));
     }
-    setSecondsLeft(null);
+    setTimerEndTime(null);
     setTimerRunning(false);
-  }, [secondsLeft, timerMinutes]);
+    setSecondsLeft(null);
+    setPausedRemaining(null);
+  }, [timerEndTime, timerMinutes, pausedRemaining]);
+
+  // Pause / resume helpers
+  const pauseTimer = useCallback(() => {
+    if (timerEndTime) {
+      setPausedRemaining(Math.max(0, Math.round((timerEndTime - Date.now()) / 1000)));
+    }
+    setTimerRunning(false);
+  }, [timerEndTime]);
+
+  const resumeTimer = useCallback(() => {
+    if (pausedRemaining !== null) {
+      setTimerEndTime(Date.now() + pausedRemaining * 1000);
+      setPausedRemaining(null);
+      setTimerRunning(true);
+    }
+  }, [pausedRemaining]);
 
   useEffect(() => {
-    if (!timerRunning || secondsLeft === null) return;
-    if (secondsLeft <= 0) {
-      logSession(timerMinutes);
-      setTimerRunning(false);
-      return;
-    }
-    const id = setInterval(() => setSecondsLeft((s) => (s !== null ? s - 1 : null)), 1000);
+    if (!timerRunning || timerEndTime === null) return;
+    const tick = () => {
+      const remaining = Math.max(0, Math.round((timerEndTime - Date.now()) / 1000));
+      setSecondsLeft(remaining);
+      if (remaining <= 0) {
+        logSession(timerMinutes);
+        setTimerRunning(false);
+      }
+    };
+    tick(); // immediate
+    const id = setInterval(tick, 500); // 500ms for accuracy after wake
     return () => clearInterval(id);
-  }, [timerRunning, secondsLeft, timerMinutes]);
+  }, [timerRunning, timerEndTime, timerMinutes]);
 
   const formatTime = (s: number) =>
     `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
@@ -176,15 +205,15 @@ export default function Index() {
                   <div className="flex items-center gap-2">
                     {timerRunning && (
                       <button
-                        onClick={() => setTimerRunning(false)}
+                        onClick={pauseTimer}
                         className="px-3 py-1.5 rounded-lg bg-secondary text-secondary-foreground text-xs font-medium"
                       >
                         Pause
                       </button>
                     )}
-                    {!timerRunning && secondsLeft > 0 && (
+                    {!timerRunning && secondsLeft !== null && secondsLeft > 0 && (
                       <button
-                        onClick={() => setTimerRunning(true)}
+                        onClick={resumeTimer}
                         className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-medium"
                       >
                         Resume
