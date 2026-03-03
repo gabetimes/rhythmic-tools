@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 
 const moods = [
-  { emoji: "😌", label: "Calm", color: "bg-sage-light" },
-  { emoji: "😊", label: "Happy", color: "bg-terracotta-light" },
-  { emoji: "😐", label: "Neutral", color: "bg-secondary" },
-  { emoji: "😔", label: "Low", color: "bg-muted" },
-  { emoji: "😤", label: "Tense", color: "bg-terracotta-light" },
+  { symbol: "〰", label: "Calm", color: "bg-sage-light" },
+  { symbol: "✦", label: "Happy", color: "bg-terracotta-light" },
+  { symbol: "◌", label: "Neutral", color: "bg-secondary" },
+  { symbol: "↓", label: "Low", color: "bg-muted" },
+  { symbol: "⟡", label: "Tense", color: "bg-terracotta-light" },
 ];
 
 export default function MoodTracker() {
@@ -35,7 +35,7 @@ export default function MoodTracker() {
                 : "hover:bg-secondary/50"
             }`}
           >
-            <span className="text-2xl">{mood.emoji}</span>
+            <span className="text-xl font-serif">{mood.symbol}</span>
             <span className="text-[10px] text-muted-foreground font-medium">{mood.label}</span>
           </button>
         ))}
