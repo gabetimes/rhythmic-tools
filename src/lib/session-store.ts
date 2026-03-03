@@ -3,7 +3,20 @@
 export interface SessionRecord {
   date: string; // YYYY-MM-DD
   minutes: number;
-  type: "prompt" | "journey";
+  type: "prompt" | "journey" | "checkin";
+}
+
+export function hasCheckedInToday(): boolean {
+  const today = new Date().toISOString().split("T")[0];
+  return getSessions().some((s) => s.date === today && s.type === "checkin");
+}
+
+export function logCheckin(): void {
+  if (hasCheckedInToday()) return;
+  const sessions = getSessions();
+  const today = new Date().toISOString().split("T")[0];
+  sessions.push({ date: today, minutes: 0, type: "checkin" });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
 }
 
 const STORAGE_KEY = "ink-sessions";

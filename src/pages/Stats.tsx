@@ -58,7 +58,7 @@ export default function Stats() {
         <div className="bg-card border border-border rounded-2xl p-4 text-center">
           <BookOpen size={18} className="text-muted-foreground mx-auto mb-2" />
           <p className="text-lg font-serif font-semibold text-foreground">{totalSessions}</p>
-          <p className="text-[10px] text-muted-foreground font-sans mt-0.5">sessions</p>
+          <p className="text-[10px] text-muted-foreground font-sans mt-0.5">check-ins</p>
         </div>
         <div className="bg-card border border-border rounded-2xl p-4 text-center">
           <Calendar size={18} className="text-muted-foreground mx-auto mb-2" />
