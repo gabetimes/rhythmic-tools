@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight, Feather, RefreshCw, Timer, X } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import MoodTracker from "@/components/MoodTracker";
-import { logSession } from "@/lib/session-store";
+import CheckinCard from "@/components/CheckinCard";
 import heroImage from "@/assets/hero-journal.jpg";
 
 function getRefreshState() {
@@ -60,17 +60,11 @@ export default function Index() {
   };
 
   const stopTimer = useCallback(() => {
-    if (timerEndTime !== null) {
-      const totalMs = timerMinutes * 60 * 1000;
-      const remaining = pausedRemaining ?? Math.max(0, timerEndTime - Date.now());
-      const elapsedSec = (totalMs - remaining * 1000) / 1000;
-      if (elapsedSec >= 30) logSession(Math.round(elapsedSec / 60));
-    }
     setTimerEndTime(null);
     setTimerRunning(false);
     setSecondsLeft(null);
     setPausedRemaining(null);
-  }, [timerEndTime, timerMinutes, pausedRemaining]);
+  }, []);
 
   // Pause / resume helpers
   const pauseTimer = useCallback(() => {
@@ -94,14 +88,13 @@ export default function Index() {
       const remaining = Math.max(0, Math.round((timerEndTime - Date.now()) / 1000));
       setSecondsLeft(remaining);
       if (remaining <= 0) {
-        logSession(timerMinutes);
         setTimerRunning(false);
       }
     };
-    tick(); // immediate
-    const id = setInterval(tick, 500); // 500ms for accuracy after wake
+    tick();
+    const id = setInterval(tick, 500);
     return () => clearInterval(id);
-  }, [timerRunning, timerEndTime, timerMinutes]);
+  }, [timerRunning, timerEndTime]);
 
   const formatTime = (s: number) =>
     `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
@@ -232,6 +225,11 @@ export default function Index() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Check-in */}
+      <div className="animate-fade-up-delay-2">
+        <CheckinCard />
       </div>
 
       {/* Mood */}
