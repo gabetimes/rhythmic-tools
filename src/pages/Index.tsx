@@ -142,7 +142,7 @@ export default function Index() {
               {secondsLeft === null ? (
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2 flex-1">
-                    {[5, 10, 15, 20].map((m) => (
+                    {[5, 10, 20, 30].map((m) => (
                       <button
                         key={m}
                         onClick={() => setTimerMinutes(m)}
