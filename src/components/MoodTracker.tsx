@@ -22,6 +22,8 @@ export default function MoodTracker() {
     const saved = localStorage.getItem(`ink-mood-${todayKey}`);
     return saved !== null ? Number(saved) : null;
   });
+  const [fading, setFading] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
     if (selected !== null) {
@@ -29,17 +31,31 @@ export default function MoodTracker() {
     }
   }, [selected, todayKey]);
 
-  // Hide once a mood is selected
-  if (selected !== null) return null;
+  const handleSelect = (i: number) => {
+    setSelected(i);
+    setFading(true);
+    setTimeout(() => setHidden(true), 500);
+  };
+
+  if (selected !== null && !fading) return null;
+  if (hidden) return null;
 
   return (
-    <div className="space-y-3">
+    <div
+      className="space-y-3 transition-all duration-500 ease-out"
+      style={{
+        opacity: fading ? 0 : 1,
+        transform: fading ? "translateY(-8px) scale(0.98)" : "translateY(0) scale(1)",
+        maxHeight: fading ? "0px" : "120px",
+        overflow: "hidden",
+      }}
+    >
       <p className="text-sm text-muted-foreground font-sans">How are you feeling?</p>
       <div className="flex gap-2">
         {moods.map((mood, i) => (
           <button
             key={mood.label}
-            onClick={() => setSelected(i)}
+            onClick={() => handleSelect(i)}
             className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all hover:bg-secondary/50"
           >
             <span className="text-xl font-serif">{mood.symbol}</span>
