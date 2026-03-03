@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Camera, ImagePlus, ArrowLeft } from "lucide-react";
 import { getTodayPrompt } from "@/data/prompts";
+import { getTodayMood } from "@/components/MoodTracker";
 
 interface CapturedSpace {
   id: string;
@@ -9,6 +10,7 @@ interface CapturedSpace {
   prompt: string;
   date: string;
   timestamp: number;
+  mood?: { symbol: string; label: string };
 }
 
 function getSpaces(): CapturedSpace[] {
@@ -57,12 +59,14 @@ export default function Capture() {
 
   const handleSave = () => {
     if (!preview) return;
+    const mood = getTodayMood();
     saveSpace({
       id: Date.now().toString(),
       imageUrl: preview,
       prompt: getTodayPrompt(),
       date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
       timestamp: Date.now(),
+      ...(mood ? { mood } : {}),
     });
     setSaved(true);
     setTimeout(() => navigate("/spaces"), 1500);

@@ -8,6 +8,14 @@ const moods = [
   { symbol: "⟡", label: "Tense", color: "bg-terracotta-light" },
 ];
 
+export function getTodayMood(): { symbol: string; label: string } | null {
+  const todayKey = new Date().toISOString().split("T")[0];
+  const saved = localStorage.getItem(`ink-mood-${todayKey}`);
+  if (saved === null) return null;
+  const idx = Number(saved);
+  return moods[idx] ? { symbol: moods[idx].symbol, label: moods[idx].label } : null;
+}
+
 export default function MoodTracker() {
   const todayKey = new Date().toISOString().split("T")[0];
   const [selected, setSelected] = useState<number | null>(() => {
@@ -21,6 +29,9 @@ export default function MoodTracker() {
     }
   }, [selected, todayKey]);
 
+  // Hide once a mood is selected
+  if (selected !== null) return null;
+
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted-foreground font-sans">How are you feeling?</p>
@@ -29,11 +40,7 @@ export default function MoodTracker() {
           <button
             key={mood.label}
             onClick={() => setSelected(i)}
-            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all ${
-              selected === i
-                ? `${mood.color} ring-2 ring-primary/30 scale-105`
-                : "hover:bg-secondary/50"
-            }`}
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all hover:bg-secondary/50"
           >
             <span className="text-xl font-serif">{mood.symbol}</span>
             <span className="text-[10px] text-muted-foreground font-medium">{mood.label}</span>

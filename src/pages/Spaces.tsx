@@ -8,6 +8,7 @@ interface CapturedSpace {
   prompt: string;
   date: string;
   timestamp: number;
+  mood?: { symbol: string; label: string };
 }
 
 export default function Spaces() {
@@ -107,24 +108,21 @@ export default function Spaces() {
                   className="w-full aspect-[4/3] object-cover"
                 />
                 <div className="p-5 space-y-3">
-                  <p className="text-xs text-muted-foreground font-sans">{selected.date}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-xs text-muted-foreground font-sans">{selected.date}</p>
+                    {selected.mood && (
+                      <span className="text-sm font-serif" title={selected.mood.label}>{selected.mood.symbol}</span>
+                    )}
+                  </div>
                   <p className="font-serif text-foreground leading-relaxed">
                     {selected.prompt}
                   </p>
-                  <div className="flex gap-3 mt-2">
-                    <button
-                      onClick={() => handleDelete(selected.id)}
-                      className="flex-1 py-2.5 rounded-xl bg-destructive/10 text-destructive text-sm font-medium hover:bg-destructive/20 transition-colors"
-                    >
-                      Delete
-                    </button>
-                    <button
-                      onClick={() => setSelected(null)}
-                      className="flex-1 py-2.5 rounded-xl bg-secondary text-secondary-foreground text-sm font-medium"
-                    >
-                      Close
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => setSelected(null)}
+                    className="w-full py-2.5 rounded-xl bg-secondary text-secondary-foreground text-sm font-medium"
+                  >
+                    Close
+                  </button>
                 </div>
               </div>
             </div>
