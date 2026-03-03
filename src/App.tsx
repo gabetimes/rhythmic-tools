@@ -9,6 +9,7 @@ import Exercises from "./pages/Exercises";
 import JourneyPage from "./pages/JourneyPage";
 import Capture from "./pages/Capture";
 import Spaces from "./pages/Spaces";
+import Stats from "./pages/Stats";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/journey/:id" element={<JourneyPage />} />
             <Route path="/capture" element={<Capture />} />
             <Route path="/spaces" element={<Spaces />} />
+            <Route path="/stats" element={<Stats />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

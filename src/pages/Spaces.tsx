@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Camera, Plus } from "lucide-react";
+import { Camera, Plus, Trash2 } from "lucide-react";
 
 interface CapturedSpace {
   id: string;
@@ -22,6 +22,13 @@ export default function Spaces() {
       setSpaces([]);
     }
   }, []);
+
+  const handleDelete = (id: string) => {
+    const updated = spaces.filter((s) => s.id !== id);
+    setSpaces(updated);
+    localStorage.setItem("ink-spaces", JSON.stringify(updated));
+    if (selected?.id === id) setSelected(null);
+  };
 
   return (
     <div className="space-y-6">
@@ -60,24 +67,31 @@ export default function Spaces() {
         <>
           <div className="grid grid-cols-2 gap-3 animate-fade-up-delay">
             {spaces.map((space) => (
-              <button
-                key={space.id}
-                onClick={() => setSelected(space)}
-                className="rounded-xl overflow-hidden border border-border hover:ring-2 hover:ring-primary/30 transition-all"
-              >
-                <img
-                  src={space.imageUrl}
-                  alt="Writing space"
-                  className="w-full aspect-square object-cover"
-                />
-                <div className="p-2.5 bg-card">
-                  <p className="text-xs text-muted-foreground font-sans">{space.date}</p>
-                </div>
-              </button>
+              <div key={space.id} className="relative group rounded-xl overflow-hidden border border-border">
+                <button
+                  onClick={() => setSelected(space)}
+                  className="w-full hover:ring-2 hover:ring-primary/30 transition-all"
+                >
+                  <img
+                    src={space.imageUrl}
+                    alt="Writing space"
+                    className="w-full aspect-square object-cover"
+                  />
+                  <div className="p-2.5 bg-card">
+                    <p className="text-xs text-muted-foreground font-sans">{space.date}</p>
+                  </div>
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleDelete(space.id); }}
+                  className="absolute top-2 right-2 p-1.5 rounded-lg bg-foreground/50 text-primary-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive"
+                  aria-label="Delete space"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
             ))}
           </div>
 
-          {/* Detail modal */}
           {selected && (
             <div
               className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
@@ -97,12 +111,20 @@ export default function Spaces() {
                   <p className="font-serif text-foreground leading-relaxed">
                     {selected.prompt}
                   </p>
-                  <button
-                    onClick={() => setSelected(null)}
-                    className="w-full py-2.5 rounded-xl bg-secondary text-secondary-foreground text-sm font-medium mt-2"
-                  >
-                    Close
-                  </button>
+                  <div className="flex gap-3 mt-2">
+                    <button
+                      onClick={() => handleDelete(selected.id)}
+                      className="flex-1 py-2.5 rounded-xl bg-destructive/10 text-destructive text-sm font-medium hover:bg-destructive/20 transition-colors"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={() => setSelected(null)}
+                      className="flex-1 py-2.5 rounded-xl bg-secondary text-secondary-foreground text-sm font-medium"
+                    >
+                      Close
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
