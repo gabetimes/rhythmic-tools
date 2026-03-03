@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Compass, Camera, Volume2, VolumeX } from "lucide-react";
+import { Home, Compass, Camera, BarChart3, Volume2, VolumeX } from "lucide-react";
 import { useAmbientSound } from "@/hooks/use-ambient-sound";
 import SoundPlayer from "./SoundPlayer";
 import { useState } from "react";
@@ -8,6 +8,7 @@ const navItems = [
   { to: "/", icon: Home, label: "Today" },
   { to: "/exercises", icon: Compass, label: "Journeys" },
   { to: "/spaces", icon: Camera, label: "Spaces" },
+  { to: "/stats", icon: BarChart3, label: "Practice" },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -54,7 +55,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <NavLink
                 key={to}
                 to={to}
-                className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-colors ${
+                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-colors ${
                   isActive
                     ? "text-primary"
                     : "text-muted-foreground hover:text-foreground"

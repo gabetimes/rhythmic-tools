@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useCallback } from "react";
 import { journeys } from "@/data/journeys";
 import { useChime } from "@/hooks/use-chime";
+import { logSession } from "@/lib/session-store";
 import Timer from "@/components/Timer";
 import { ArrowLeft, Check } from "lucide-react";
 
@@ -110,6 +111,8 @@ export default function JourneyPage() {
         <button
           onClick={() => {
             if (isLast) {
+              const totalMin = journey.steps.reduce((s, st) => s + st.durationMinutes, 0);
+              logSession(totalMin, "journey");
               setCompleted(true);
             } else {
               setCurrentStep((s) => s + 1);
