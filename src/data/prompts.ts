@@ -38,3 +38,14 @@ export function getTodayPrompt(): string {
   );
   return dailyPrompts[dayOfYear % dailyPrompts.length];
 }
+
+export function getCurrentPrompt(): string {
+  const todayKey = new Date().toISOString().split("T")[0];
+  try {
+    const saved = JSON.parse(localStorage.getItem("ink-prompt-refresh") || "{}");
+    if (saved.date === todayKey && saved.index >= 0) {
+      return dailyPrompts[saved.index % dailyPrompts.length];
+    }
+  } catch { /* ignore */ }
+  return getTodayPrompt();
+}

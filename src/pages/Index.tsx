@@ -1,4 +1,4 @@
-import { dailyPrompts, getTodayPrompt } from "@/data/prompts";
+import { dailyPrompts, getCurrentPrompt } from "@/data/prompts";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Feather, RefreshCw, Timer, X } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -31,8 +31,7 @@ export default function Index() {
 
   // Prompt refresh logic
   const [refreshState, setRefreshState] = useState(getRefreshState);
-  const basePrompt = getTodayPrompt();
-  const prompt = refreshState.index >= 0 ? dailyPrompts[refreshState.index % dailyPrompts.length] : basePrompt;
+  const prompt = refreshState.index >= 0 ? dailyPrompts[refreshState.index % dailyPrompts.length] : getCurrentPrompt();
   const refreshesLeft = 3 - refreshState.count;
 
   const handleRefresh = () => {
