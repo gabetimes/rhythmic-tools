@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Camera, ImagePlus, ArrowLeft } from "lucide-react";
-import { getTodayPrompt } from "@/data/prompts";
+import { getCurrentPrompt } from "@/data/prompts";
 import { getTodayMood } from "@/components/MoodTracker";
 
 interface CapturedSpace {
@@ -63,7 +63,7 @@ export default function Capture() {
     saveSpace({
       id: Date.now().toString(),
       imageUrl: preview,
-      prompt: getTodayPrompt(),
+      prompt: getCurrentPrompt(),
       date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
       timestamp: Date.now(),
       ...(mood ? { mood } : {}),
@@ -119,7 +119,7 @@ export default function Capture() {
 
           <div className="bg-card border border-border rounded-xl p-4">
             <p className="text-xs text-muted-foreground font-sans mb-1">Today's prompt</p>
-            <p className="text-sm font-serif text-foreground leading-relaxed">{getTodayPrompt()}</p>
+            <p className="text-sm font-serif text-foreground leading-relaxed">{getCurrentPrompt()}</p>
           </div>
 
           <div className="flex gap-3">
