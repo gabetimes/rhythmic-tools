@@ -1,48 +1,23 @@
 
 
-## Plan: Manual "I Wrote Today" Check-in
+## Plan: Fix Prompt Capture and Allow Multiple Daily Images
 
-### Concept
-Add a simple, prominent check-in card to the **Today** dashboard where users can mark that they journaled. This becomes the primary driver of streaks and stats — a conscious, intentional tap rather than passive tracking.
+### Problem
+1. `Capture.tsx` calls `getTodayPrompt()` which always returns the base prompt for the day, ignoring any refreshes the user made on the Today tab.
+2. The current prompt the user sees is determined by the refresh state stored in `localStorage` under `"ink-prompt-refresh"` — but the Capture page doesn't read this.
 
 ### Changes
 
-**1. Update session store (`session-store.ts`)**
-- Add a `logCheckin()` function that records a session of type `"checkin"` for today (idempotent — only one per day).
-- Add `hasCheckedInToday()` helper to check if today is already marked.
-- Streak and stats logic remains unchanged since it already counts any `SessionRecord`.
+**1. Add a `getCurrentPrompt()` helper (`src/data/prompts.ts`)**
+- New exported function that reads `"ink-prompt-refresh"` from localStorage and returns the currently active prompt (accounting for refreshes), falling back to `getTodayPrompt()`.
+- This centralizes the "what prompt is the user seeing right now?" logic.
 
-**2. Add check-in card to dashboard (`Index.tsx`)**
-- Place a card between the daily prompt and the "Start a Journey" button.
-- When unchecked: shows a gentle prompt like *"Did you write today?"* with a single tap target (a circle or checkbox with a pen/check icon).
-- When checked: the card transforms to a soft confirmed state — *"Checked in ✓"* — with a fade transition, then collapses after a moment (similar to the mood tracker pattern).
-- Tapping logs a `checkin` session via `logCheckin()`.
+**2. Update `Capture.tsx`**
+- Import and use `getCurrentPrompt()` instead of `getTodayPrompt()` in both the preview display and the `handleSave` call.
+- No changes needed for multiple images — `saveSpace()` already uses `Date.now()` as the ID and unshifts into the array, so multiple captures per day already work. The only implicit limit is the max-20 cap, which is fine.
 
-**3. Remove automatic session logging from timer**
-- The inline timer and journey completion will **no longer** call `logSession()` automatically. The check-in is the single source of truth for "I journaled today."
-- Timer remains purely as a focus tool.
+**3. Update `Index.tsx`**
+- Replace the inline prompt resolution logic with `getCurrentPrompt()` to keep it DRY (optional but clean).
 
-**4. Stats dashboard (`Stats.tsx`)**
-- No structural changes needed — `getSessions()` already aggregates all records, so check-ins will feed into streaks, unique days, and total sessions naturally.
-- Optionally update the "sessions" label to "days" since check-in is once per day.
-
-### UX Flow
-```text
-Dashboard
-┌──────────────────────────┐
-│  Daily Prompt            │
-│  [timer] [refresh]       │
-├──────────────────────────┤
-│  ○  Did you write today? │  ← tap to check in
-│     Tap to check in      │
-├──────────────────────────┤
-│  Mood check-in           │
-│  Start a Journey →       │
-└──────────────────────────┘
-```
-
-After tap:
-```text
-│  ● Checked in for today  │  ← fades/collapses
-```
+Two files changed, one new function. No structural changes needed for multiple daily images — that already works.
 
