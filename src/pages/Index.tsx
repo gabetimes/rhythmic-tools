@@ -1,23 +1,25 @@
-import { dailyPrompts, getCurrentPrompt } from "@/data/prompts";
+import { getTodayPrompts, getCurrentPrompt } from "@/data/prompts";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Feather, RefreshCw, Timer, X } from "lucide-react";
+import { ArrowRight, ChevronLeft, Feather, RefreshCw, Timer, X } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import MoodTracker from "@/components/MoodTracker";
 import CheckinCard from "@/components/CheckinCard";
 import heroImage from "@/assets/hero-journal.jpg";
 
-function getRefreshState() {
+function getPromptState(): { promptIndex: number } {
   const todayKey = new Date().toISOString().split("T")[0];
   try {
     const saved = JSON.parse(localStorage.getItem("ink-prompt-refresh") || "{}");
-    if (saved.date === todayKey) return { count: saved.count as number, index: saved.index as number };
+    if (saved.date === todayKey && typeof saved.promptIndex === "number") {
+      return { promptIndex: saved.promptIndex };
+    }
   } catch { /* ignore */ }
-  return { count: 0, index: -1 };
+  return { promptIndex: 0 };
 }
 
-function saveRefreshState(count: number, index: number) {
+function savePromptState(promptIndex: number) {
   const todayKey = new Date().toISOString().split("T")[0];
-  localStorage.setItem("ink-prompt-refresh", JSON.stringify({ date: todayKey, count, index }));
+  localStorage.setItem("ink-prompt-refresh", JSON.stringify({ date: todayKey, promptIndex }));
 }
 
 export default function Index() {
@@ -29,17 +31,22 @@ export default function Index() {
     day: "numeric",
   });
 
-  // Prompt refresh logic
-  const [refreshState, setRefreshState] = useState(getRefreshState);
-  const prompt = refreshState.index >= 0 ? dailyPrompts[refreshState.index % dailyPrompts.length] : getCurrentPrompt();
-  const refreshesLeft = 3 - refreshState.count;
+  const todayPrompts = getTodayPrompts();
+  const [promptIndex, setPromptIndex] = useState(() => getPromptState().promptIndex);
+  const prompt = todayPrompts[promptIndex];
 
   const handleRefresh = () => {
-    if (refreshesLeft <= 0) return;
-    const newIndex = (refreshState.index >= 0 ? refreshState.index : Math.floor(Math.random() * dailyPrompts.length)) + 1 + Math.floor(Math.random() * (dailyPrompts.length - 1));
-    const newCount = refreshState.count + 1;
-    setRefreshState({ count: newCount, index: newIndex });
-    saveRefreshState(newCount, newIndex);
+    if (promptIndex >= 2) return;
+    const next = promptIndex + 1;
+    setPromptIndex(next);
+    savePromptState(next);
+  };
+
+  const handleBack = () => {
+    if (promptIndex <= 0) return;
+    const prev = promptIndex - 1;
+    setPromptIndex(prev);
+    savePromptState(prev);
   };
 
   // Inline timer — wall-clock based so it survives screen lock
@@ -48,7 +55,6 @@ export default function Index() {
   const [timerEndTime, setTimerEndTime] = useState<number | null>(null);
   const [timerRunning, setTimerRunning] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
-  // Track elapsed when paused
   const [pausedRemaining, setPausedRemaining] = useState<number | null>(null);
 
   const startTimer = () => {
@@ -65,7 +71,6 @@ export default function Index() {
     setPausedRemaining(null);
   }, []);
 
-  // Pause / resume helpers
   const pauseTimer = useCallback(() => {
     if (timerEndTime) {
       setPausedRemaining(Math.max(0, Math.round((timerEndTime - Date.now()) / 1000)));
@@ -136,24 +141,40 @@ export default function Index() {
               >
                 <Timer size={15} />
               </button>
+              {promptIndex > 0 && (
+                <button
+                  onClick={handleBack}
+                  className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  aria-label="Previous prompt"
+                >
+                  <ChevronLeft size={15} />
+                </button>
+              )}
               <button
                 onClick={handleRefresh}
-                disabled={refreshesLeft <= 0}
+                disabled={promptIndex >= 2}
                 className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                aria-label={`Refresh prompt (${refreshesLeft} left)`}
-                title={`${refreshesLeft} refreshes left today`}
+                aria-label="Next prompt"
               >
                 <RefreshCw size={15} />
               </button>
-              {refreshesLeft < 3 && (
-                <span className="text-[10px] text-muted-foreground font-sans ml-0.5">{refreshesLeft}</span>
-              )}
             </div>
           </div>
           <p className="font-serif text-lg leading-relaxed text-foreground">
             {prompt}
           </p>
-          <p className="text-xs text-muted-foreground mt-4 font-sans">
+          {/* Dot indicator */}
+          <div className="flex items-center gap-1.5 mt-3">
+            {[0, 1, 2].map((i) => (
+              <span
+                key={i}
+                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                  i === promptIndex ? "bg-accent" : "bg-muted-foreground/30"
+                }`}
+              />
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground mt-3 font-sans">
             Open your notebook and write for as long as this speaks to you.
           </p>
 
