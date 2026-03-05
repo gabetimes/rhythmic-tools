@@ -1,23 +1,31 @@
 
 
-## Plan: Fix Prompt Capture and Allow Multiple Daily Images
-
-### Problem
-1. `Capture.tsx` calls `getTodayPrompt()` which always returns the base prompt for the day, ignoring any refreshes the user made on the Today tab.
-2. The current prompt the user sees is determined by the refresh state stored in `localStorage` under `"ink-prompt-refresh"` — but the Capture page doesn't read this.
+## Plan: Prompt Navigation and No-Repeat Logic
 
 ### Changes
 
-**1. Add a `getCurrentPrompt()` helper (`src/data/prompts.ts`)**
-- New exported function that reads `"ink-prompt-refresh"` from localStorage and returns the currently active prompt (accounting for refreshes), falling back to `getTodayPrompt()`.
-- This centralizes the "what prompt is the user seeing right now?" logic.
+**1. Expand prompt pool to 100+ (`src/data/prompts.ts`)**
+- Add ~70 more prompts to reach at least 100, ensuring no repeats within 100 days since `getTodayPrompt()` uses `dayOfYear % dailyPrompts.length`.
 
-**2. Update `Capture.tsx`**
-- Import and use `getCurrentPrompt()` instead of `getTodayPrompt()` in both the preview display and the `handleSave` call.
-- No changes needed for multiple images — `saveSpace()` already uses `Date.now()` as the ID and unshifts into the array, so multiple captures per day already work. The only implicit limit is the max-20 cap, which is fine.
+**2. Deterministic 3-prompt-per-day system (`src/data/prompts.ts`)**
+- New `getTodayPrompts(): string[]` function that returns exactly 3 prompts for the day using the day-of-year seed — the base prompt plus 2 alternates, all guaranteed distinct.
+- `getCurrentPrompt()` updated to read from the active index (0, 1, or 2).
 
-**3. Update `Index.tsx`**
-- Replace the inline prompt resolution logic with `getCurrentPrompt()` to keep it DRY (optional but clean).
+**3. Rework refresh state and navigation (`src/pages/Index.tsx`)**
+- Store `promptIndex` (0–2) instead of arbitrary random indices. Refresh increments from 0→1→2. Max 2 refreshes (3 prompts total).
+- Save the full state as `{ date, promptIndex }` in localStorage.
+- Add a left-arrow (ChevronLeft) button that appears when `promptIndex > 0` to go back to previous prompts. Sits to the left of the refresh button. Minimal design: same icon-button style as timer/refresh.
+- Show a dot indicator (e.g., `● ○ ○`) below the prompt text showing which of the 3 prompts is active — small, unobtrusive, same muted-foreground style.
 
-Two files changed, one new function. No structural changes needed for multiple daily images — that already works.
+**4. Update `getCurrentPrompt()` in `prompts.ts`**
+- Reads `promptIndex` from localStorage, calls `getTodayPrompts()[index]`.
+
+### UX
+- Prompt card header stays the same
+- Icon row: `[Timer] [◀ back] [↻ refresh] [dot indicator 1/3]`
+- Back button only visible when index > 0; refresh button disabled when index = 2
+- Dot indicator: 3 tiny dots below prompt text showing position
+
+### No-repeat guarantee
+With 100+ prompts and day-of-year modulo, prompts won't repeat for 100+ days. The 3 daily picks use offsets (e.g., `dayOfYear`, `dayOfYear + 37`, `dayOfYear + 71`) mod pool size to stay deterministic and distinct.
 
