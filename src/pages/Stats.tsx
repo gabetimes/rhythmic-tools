@@ -1,15 +1,11 @@
-import { getStreak, getTotalMinutes, getTotalSessions, getUniqueDays } from "@/lib/session-store";
-import { Flame, Clock, BookOpen, Calendar } from "lucide-react";
+import { getStreak, getJourneyCount, getTotalSessions, getUniqueDays } from "@/lib/session-store";
+import { Flame, Compass, BookOpen, Calendar } from "lucide-react";
 
 export default function Stats() {
   const streak = getStreak();
-  const totalMin = getTotalMinutes();
+  const journeyCount = getJourneyCount();
   const totalSessions = getTotalSessions();
   const uniqueDays = getUniqueDays();
-
-  const hours = Math.floor(totalMin / 60);
-  const mins = totalMin % 60;
-  const timeStr = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 
   return (
     <div className="space-y-6">
@@ -51,9 +47,9 @@ export default function Stats() {
       {/* Stats grid */}
       <div className="grid grid-cols-3 gap-3 animate-fade-up-delay-2">
         <div className="bg-card border border-border rounded-2xl p-4 text-center">
-          <Clock size={18} className="text-muted-foreground mx-auto mb-2" />
-          <p className="text-lg font-serif font-semibold text-foreground">{timeStr}</p>
-          <p className="text-[10px] text-muted-foreground font-sans mt-0.5">time writing</p>
+          <Compass size={18} className="text-muted-foreground mx-auto mb-2" />
+          <p className="text-lg font-serif font-semibold text-foreground">{journeyCount}</p>
+          <p className="text-[10px] text-muted-foreground font-sans mt-0.5">journeys done</p>
         </div>
         <div className="bg-card border border-border rounded-2xl p-4 text-center">
           <BookOpen size={18} className="text-muted-foreground mx-auto mb-2" />
