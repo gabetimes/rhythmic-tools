@@ -1,15 +1,11 @@
-import { getStreak, getTotalMinutes, getTotalSessions, getUniqueDays } from "@/lib/session-store";
-import { Flame, Clock, BookOpen, Calendar } from "lucide-react";
+import { getStreak, getJourneyCount, getTotalSessions, getUniqueDays } from "@/lib/session-store";
+import { Flame, Compass, BookOpen, Calendar } from "lucide-react";
 
 export default function Stats() {
   const streak = getStreak();
-  const totalMin = getTotalMinutes();
+  const journeyCount = getJourneyCount();
   const totalSessions = getTotalSessions();
   const uniqueDays = getUniqueDays();
-
-  const hours = Math.floor(totalMin / 60);
-  const mins = totalMin % 60;
-  const timeStr = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 
   return (
     <div className="space-y-6">

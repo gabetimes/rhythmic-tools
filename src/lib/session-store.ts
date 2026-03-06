@@ -64,6 +64,10 @@ export function getTotalMinutes(): number {
   return getSessions().reduce((sum, s) => sum + s.minutes, 0);
 }
 
+export function getJourneyCount(): number {
+  return getSessions().filter((s) => s.type === "journey").length;
+}
+
 export function getTotalSessions(): number {
   return getSessions().length;
 }
