@@ -16,7 +16,7 @@ export default function Exercises() {
   return (
     <div className="space-y-6">
       <div className="animate-fade-up">
-        <h2 className="text-2xl font-serif font-semibold text-foreground">Journeys</h2>
+        <h2 className="text-2xl font-serif font-semibold text-foreground italic">Journeys</h2>
         <p className="text-sm text-muted-foreground mt-1 font-sans">
           Guided writing exercises to take you deeper.
         </p>
@@ -29,16 +29,16 @@ export default function Exercises() {
             <button
               key={journey.id}
               onClick={() => navigate(`/journey/${journey.id}`)}
-              className="w-full text-left bg-card border border-border rounded-2xl p-5 hover:bg-secondary/40 transition-colors group animate-fade-up"
+              className="w-full text-left bg-card/70 border border-border/50 rounded-3xl p-5 hover:bg-secondary/40 transition-all group animate-fade-up shadow-soft"
               style={{ animationDelay: `${i * 0.08}s` }}
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center mt-0.5">
+                  <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center mt-0.5">
                     <Icon size={18} className="text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-serif font-semibold text-foreground">
+                    <h3 className="font-serif font-semibold text-foreground italic">
                       {journey.title}
                     </h3>
                     <p className="text-sm text-muted-foreground mt-1 leading-relaxed font-sans">
