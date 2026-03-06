@@ -16,6 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const ambient = useAmbientSound();
   const [showSound, setShowSound] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
