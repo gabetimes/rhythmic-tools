@@ -25,6 +25,8 @@ function savePromptState(promptIndex: number) {
 export default function Index() {
   const navigate = useNavigate();
   const today = new Date();
+  const hour = today.getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
   const dateStr = today.toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
@@ -117,7 +119,7 @@ export default function Index() {
           <div className="absolute bottom-4 left-4 right-4">
             <p className="text-primary-foreground/70 text-sm font-sans">{dateStr}</p>
             <h2 className="text-primary-foreground text-lg font-serif font-semibold mt-0.5">
-              Good morning
+              {greeting}
             </h2>
           </div>
         </div>
