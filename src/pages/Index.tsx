@@ -4,7 +4,6 @@ import { ArrowRight, ChevronLeft, Feather, RefreshCw, Timer, X } from "lucide-re
 import { useState, useEffect, useCallback } from "react";
 import MoodTracker from "@/components/MoodTracker";
 import CheckinCard from "@/components/CheckinCard";
-import heroImage from "@/assets/hero-journal.jpg";
 
 function getPromptState(): { promptIndex: number } {
   const todayKey = new Date().toISOString().split("T")[0];
@@ -106,39 +105,36 @@ export default function Index() {
     `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
   return (
-    <div className="space-y-8">
-      {/* Hero */}
+    <div className="space-y-6">
+      {/* Hero — sunrise gradient inspired by reference */}
       <div className="animate-fade-up">
-        <div className="relative rounded-2xl overflow-hidden h-40">
-          <img
-            src={heroImage}
-            alt="A cozy journaling scene"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent" />
-          <div className="absolute bottom-4 left-4 right-4">
-            <p className="text-primary-foreground/70 text-sm font-sans">{dateStr}</p>
-            <h2 className="text-primary-foreground text-lg font-serif font-semibold mt-0.5">
-              {greeting}
-            </h2>
-          </div>
+        <div className="relative rounded-3xl overflow-hidden bg-sunrise p-6 pb-8 shadow-soft">
+          <p className="text-muted-foreground text-xs font-sans font-medium tracking-wider uppercase">{dateStr}</p>
+          <h2 className="text-foreground text-2xl font-serif font-semibold mt-2 italic">
+            {greeting}
+          </h2>
+          <p className="text-muted-foreground text-sm font-sans mt-2 leading-relaxed max-w-[260px]">
+            Take it slow today. Your words are waiting for you.
+          </p>
         </div>
       </div>
 
       {/* Daily Prompt */}
       <div className="animate-fade-up-delay">
-        <div className="bg-card rounded-2xl p-6 border border-border">
-          <div className="flex items-center justify-between mb-3">
+        <div className="bg-card/70 backdrop-blur-sm rounded-3xl p-6 border border-border/50 shadow-soft">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <Feather size={16} className="text-accent" />
-              <span className="text-xs font-medium text-accent uppercase tracking-wider">
+              <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
+                <Feather size={14} className="text-primary" />
+              </div>
+              <span className="text-xs font-medium text-primary uppercase tracking-wider font-sans">
                 Today's Prompt
               </span>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5">
               <button
                 onClick={() => setShowTimer(!showTimer)}
-                className={`p-1.5 rounded-lg transition-colors ${showTimer ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary"}`}
+                className={`p-2 rounded-xl transition-all ${showTimer ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"}`}
                 aria-label="Toggle timer"
               >
                 <Timer size={15} />
@@ -146,7 +142,7 @@ export default function Index() {
               {promptIndex > 0 && (
                 <button
                   onClick={handleBack}
-                  className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-all"
                   aria-label="Previous prompt"
                 >
                   <ChevronLeft size={15} />
@@ -155,34 +151,34 @@ export default function Index() {
               <button
                 onClick={handleRefresh}
                 disabled={promptIndex >= 2}
-                className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                 aria-label="Next prompt"
               >
                 <RefreshCw size={15} />
               </button>
             </div>
           </div>
-          <p className="font-serif text-lg leading-relaxed text-foreground">
+          <p className="font-serif text-lg leading-relaxed text-foreground italic">
             {prompt}
           </p>
           {/* Dot indicator */}
-          <div className="flex items-center gap-1.5 mt-3">
+          <div className="flex items-center gap-1.5 mt-4">
             {[0, 1, 2].map((i) => (
               <span
                 key={i}
-                className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                  i === promptIndex ? "bg-accent" : "bg-muted-foreground/30"
+                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                  i === promptIndex ? "bg-primary scale-110" : "bg-muted-foreground/20"
                 }`}
               />
             ))}
           </div>
-          <p className="text-xs text-muted-foreground mt-3 font-sans">
+          <p className="text-xs text-muted-foreground mt-3 font-sans leading-relaxed">
             Open your notebook and write for as long as this speaks to you.
           </p>
 
           {/* Inline timer */}
           {showTimer && (
-            <div className="mt-4 pt-4 border-t border-border">
+            <div className="mt-5 pt-5 border-t border-border/40">
               {secondsLeft === null ? (
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2 flex-1">
@@ -190,10 +186,10 @@ export default function Index() {
                       <button
                         key={m}
                         onClick={() => setTimerMinutes(m)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                        className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${
                           timerMinutes === m
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                            ? "bg-primary text-primary-foreground shadow-soft"
+                            : "bg-secondary/60 text-secondary-foreground hover:bg-secondary"
                         }`}
                       >
                         {m}m
@@ -202,7 +198,7 @@ export default function Index() {
                   </div>
                   <button
                     onClick={startTimer}
-                    className="px-4 py-1.5 rounded-lg bg-accent text-accent-foreground text-xs font-medium hover:opacity-90 transition-opacity"
+                    className="px-5 py-1.5 rounded-xl bg-accent text-accent-foreground text-xs font-medium hover:opacity-90 transition-opacity shadow-soft"
                   >
                     Start
                   </button>
@@ -221,7 +217,7 @@ export default function Index() {
                     {timerRunning && (
                       <button
                         onClick={pauseTimer}
-                        className="px-3 py-1.5 rounded-lg bg-secondary text-secondary-foreground text-xs font-medium"
+                        className="px-3 py-1.5 rounded-xl bg-secondary text-secondary-foreground text-xs font-medium"
                       >
                         Pause
                       </button>
@@ -229,14 +225,14 @@ export default function Index() {
                     {!timerRunning && secondsLeft !== null && secondsLeft > 0 && (
                       <button
                         onClick={resumeTimer}
-                        className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-medium"
+                        className="px-3 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-medium"
                       >
                         Resume
                       </button>
                     )}
                     <button
                       onClick={stopTimer}
-                      className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                      className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-all"
                       aria-label="Stop timer"
                     >
                       <X size={15} />
@@ -263,10 +259,10 @@ export default function Index() {
       <div className="animate-fade-up-delay-2">
         <button
           onClick={() => navigate("/exercises")}
-          className="w-full flex items-center justify-between bg-primary text-primary-foreground rounded-2xl p-5 hover:opacity-90 transition-opacity group"
+          className="w-full flex items-center justify-between bg-primary text-primary-foreground rounded-3xl p-5 hover:opacity-90 transition-opacity group shadow-soft-lg"
         >
           <div className="text-left">
-            <p className="font-serif text-lg font-semibold">Start a Journey</p>
+            <p className="font-serif text-lg font-semibold italic">Start a Journey</p>
             <p className="text-sm opacity-80 mt-0.5 font-sans">
               Guided writing exercises with timers
             </p>
@@ -282,10 +278,10 @@ export default function Index() {
       <div className="animate-fade-up-delay-2">
         <button
           onClick={() => navigate("/capture")}
-          className="w-full flex items-center justify-between bg-card text-card-foreground border border-border rounded-2xl p-5 hover:bg-secondary/50 transition-colors group"
+          className="w-full flex items-center justify-between bg-card/70 text-card-foreground border border-border/50 rounded-3xl p-5 hover:bg-secondary/40 transition-all group shadow-soft"
         >
           <div className="text-left">
-            <p className="font-serif text-lg font-semibold">Capture the Moment</p>
+            <p className="font-serif text-lg font-semibold italic">Capture the Moment</p>
             <p className="text-sm text-muted-foreground mt-0.5 font-sans">
               Photograph your writing space
             </p>
