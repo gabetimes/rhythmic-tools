@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Compass, Camera, BarChart3, Volume2, VolumeX } from "lucide-react";
+import { Home, Compass, Camera, BarChart3, Volume2, VolumeX, Moon, Sun } from "lucide-react";
 import { useAmbientSound } from "@/hooks/use-ambient-sound";
+import { useTheme } from "next-themes";
 import SoundPlayer from "./SoundPlayer";
 import { useState } from "react";
 
@@ -15,6 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const ambient = useAmbientSound();
   const [showSound, setShowSound] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -24,13 +26,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <h1 className="text-xl font-serif font-semibold tracking-tight text-foreground">
             ink
           </h1>
-          <button
-            onClick={() => setShowSound(!showSound)}
-            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-            aria-label="Toggle sound player"
-          >
-            {ambient.playing ? <Volume2 size={20} /> : <VolumeX size={20} />}
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+              aria-label="Toggle dark mode"
+            >
+              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+            <button
+              onClick={() => setShowSound(!showSound)}
+              className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+              aria-label="Toggle sound player"
+            >
+              {ambient.playing ? <Volume2 size={20} /> : <VolumeX size={20} />}
+            </button>
+          </div>
         </div>
         {showSound && (
           <div className="border-t border-border">
