@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        serif: ["Playfair Display", "Georgia", "serif"],
-        sans: ["DM Sans", "system-ui", "sans-serif"],
+        serif: ["Lora", "Georgia", "serif"],
+        sans: ["Source Sans 3", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -73,21 +73,11 @@ export default {
         warm: {
           glow: "hsl(var(--warm-glow))",
         },
-        peach: "hsl(var(--peach))",
-        blush: "hsl(var(--blush))",
-        "sky-soft": "hsl(var(--sky-soft))",
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-        "2xl": "1.25rem",
-        "3xl": "1.5rem",
-      },
-      boxShadow: {
-        soft: "0 2px 20px -4px hsl(var(--primary) / 0.08)",
-        "soft-lg": "0 4px 30px -6px hsl(var(--primary) / 0.12)",
-        glow: "0 0 20px hsl(var(--primary) / 0.15)",
       },
       keyframes: {
         "accordion-down": {

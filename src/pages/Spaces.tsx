@@ -35,14 +35,14 @@ export default function Spaces() {
     <div className="space-y-6">
       <div className="flex items-center justify-between animate-fade-up">
         <div>
-          <h2 className="text-2xl font-serif font-semibold text-foreground italic">Journaling Spaces</h2>
+          <h2 className="text-2xl font-serif font-semibold text-foreground">Journaling Spaces</h2>
           <p className="text-sm text-muted-foreground mt-1 font-sans">
             Your writing environments
           </p>
         </div>
         <button
           onClick={() => navigate("/capture")}
-          className="p-2.5 rounded-2xl bg-primary text-primary-foreground hover:opacity-90 transition-opacity shadow-soft"
+          className="p-2.5 rounded-xl bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
         >
           <Plus size={18} />
         </button>
@@ -53,13 +53,13 @@ export default function Spaces() {
           <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center mb-4">
             <Camera size={24} className="text-muted-foreground" />
           </div>
-          <p className="text-muted-foreground text-sm text-center font-sans leading-relaxed">
+          <p className="text-muted-foreground text-sm text-center font-sans">
             No spaces captured yet.<br />
             Take a photo of where you write.
           </p>
           <button
             onClick={() => navigate("/capture")}
-            className="mt-5 px-6 py-3 rounded-3xl bg-primary text-primary-foreground text-sm font-medium shadow-soft-lg"
+            className="mt-4 px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-medium"
           >
             Capture First Space
           </button>
@@ -68,23 +68,23 @@ export default function Spaces() {
         <>
           <div className="grid grid-cols-2 gap-3 animate-fade-up-delay">
             {spaces.map((space) => (
-              <div key={space.id} className="relative group rounded-2xl overflow-hidden border border-border/50 shadow-soft">
+              <div key={space.id} className="relative group rounded-xl overflow-hidden border border-border">
                 <button
                   onClick={() => setSelected(space)}
-                  className="w-full hover:ring-2 hover:ring-primary/30 transition-all rounded-2xl overflow-hidden"
+                  className="w-full hover:ring-2 hover:ring-primary/30 transition-all"
                 >
                   <img
                     src={space.imageUrl}
                     alt="Writing space"
                     className="w-full aspect-square object-cover"
                   />
-                  <div className="p-2.5 bg-card/70">
+                  <div className="p-2.5 bg-card">
                     <p className="text-xs text-muted-foreground font-sans">{space.date}</p>
                   </div>
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleDelete(space.id); }}
-                  className="absolute top-2 right-2 p-1.5 rounded-xl bg-foreground/50 text-primary-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive"
+                  className="absolute top-2 right-2 p-1.5 rounded-lg bg-foreground/50 text-primary-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive"
                   aria-label="Delete space"
                 >
                   <Trash2 size={14} />
@@ -95,11 +95,11 @@ export default function Spaces() {
 
           {selected && (
             <div
-              className="fixed inset-0 z-50 bg-foreground/30 backdrop-blur-md flex items-end sm:items-center justify-center p-4"
+              className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
               onClick={() => setSelected(null)}
             >
               <div
-                className="bg-background rounded-3xl overflow-hidden max-w-md w-full max-h-[85vh] overflow-y-auto border border-border/50 shadow-soft-lg"
+                className="bg-background rounded-2xl overflow-hidden max-w-md w-full max-h-[85vh] overflow-y-auto border border-border"
                 onClick={(e) => e.stopPropagation()}
               >
                 <img
@@ -107,19 +107,19 @@ export default function Spaces() {
                   alt="Writing space"
                   className="w-full aspect-[4/3] object-cover"
                 />
-                <div className="p-6 space-y-3">
+                <div className="p-5 space-y-3">
                   <div className="flex items-center gap-2">
                     <p className="text-xs text-muted-foreground font-sans">{selected.date}</p>
                     {selected.mood && (
                       <span className="text-sm font-serif" title={selected.mood.label}>{selected.mood.symbol}</span>
                     )}
                   </div>
-                  <p className="font-serif text-foreground leading-relaxed italic">
+                  <p className="font-serif text-foreground leading-relaxed">
                     {selected.prompt}
                   </p>
                   <button
                     onClick={() => setSelected(null)}
-                    className="w-full py-3 rounded-2xl bg-secondary text-secondary-foreground text-sm font-medium"
+                    className="w-full py-2.5 rounded-xl bg-secondary text-secondary-foreground text-sm font-medium"
                   >
                     Close
                   </button>

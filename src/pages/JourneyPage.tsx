@@ -32,18 +32,18 @@ export default function JourneyPage() {
   if (completed) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-fade-up">
-        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6 shadow-glow">
-          <Check size={32} className="text-primary" />
+        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+          <Check size={28} className="text-primary" />
         </div>
-        <h2 className="text-2xl font-serif font-semibold text-foreground italic">
+        <h2 className="text-2xl font-serif font-semibold text-foreground">
           Journey Complete
         </h2>
-        <p className="text-muted-foreground mt-2 max-w-xs font-sans leading-relaxed">
+        <p className="text-muted-foreground mt-2 max-w-xs font-sans">
           You showed up for yourself today. That matters more than the words on the page.
         </p>
         <button
           onClick={() => navigate("/")}
-          className="mt-8 px-8 py-3.5 rounded-3xl bg-primary text-primary-foreground font-medium text-sm shadow-soft-lg"
+          className="mt-8 px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium text-sm"
         >
           Return Home
         </button>
@@ -60,12 +60,12 @@ export default function JourneyPage() {
       <div className="flex items-center gap-3 animate-fade-up">
         <button
           onClick={() => navigate("/exercises")}
-          className="p-2.5 -ml-2 rounded-2xl text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-all"
+          className="p-2 -ml-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
         >
           <ArrowLeft size={20} />
         </button>
         <div>
-          <h2 className="font-serif font-semibold text-foreground italic">{journey.title}</h2>
+          <h2 className="font-serif font-semibold text-foreground">{journey.title}</h2>
           <p className="text-xs text-muted-foreground font-sans">
             Step {currentStep + 1} of {journey.steps.length}
           </p>
@@ -77,20 +77,20 @@ export default function JourneyPage() {
         {journey.steps.map((_, i) => (
           <div
             key={i}
-            className={`h-1.5 rounded-full flex-1 transition-all duration-300 ${
-              i <= currentStep ? "bg-primary shadow-glow" : "bg-secondary"
+            className={`h-1.5 rounded-full flex-1 transition-all ${
+              i <= currentStep ? "bg-primary" : "bg-secondary"
             }`}
           />
         ))}
       </div>
 
       {/* Prompt */}
-      <div className="bg-card/70 border border-border/50 rounded-3xl p-6 animate-fade-up-delay shadow-soft">
-        <p className="font-serif text-lg leading-relaxed text-foreground italic">
+      <div className="bg-card border border-border rounded-2xl p-6 animate-fade-up-delay">
+        <p className="font-serif text-lg leading-relaxed text-foreground">
           {step.prompt}
         </p>
         {step.instruction && (
-          <p className="text-sm text-primary mt-4 font-sans italic">
+          <p className="text-sm text-accent mt-4 font-sans italic">
             {step.instruction}
           </p>
         )}
@@ -113,11 +113,12 @@ export default function JourneyPage() {
             if (isLast) {
               logCheckin();
               setCompleted(true);
+              setCompleted(true);
             } else {
               setCurrentStep((s) => s + 1);
             }
           }}
-          className="px-8 py-3 rounded-3xl bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 transition-all shadow-soft"
+          className="px-6 py-2.5 rounded-full bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 transition-colors"
         >
           {isLast ? "Finish Journey" : "Next Step →"}
         </button>

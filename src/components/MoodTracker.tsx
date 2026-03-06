@@ -56,7 +56,7 @@ export default function MoodTracker() {
           <button
             key={mood.label}
             onClick={() => handleSelect(i)}
-            className="flex flex-col items-center gap-1 px-3 py-2.5 rounded-2xl transition-all hover:bg-secondary/50 hover:shadow-soft"
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all hover:bg-secondary/50"
           >
             <span className="text-xl font-serif">{mood.symbol}</span>
             <span className="text-[10px] text-muted-foreground font-medium">{mood.label}</span>

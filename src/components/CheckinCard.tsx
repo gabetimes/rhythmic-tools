@@ -30,19 +30,19 @@ export default function CheckinCard() {
     >
       <button
         onClick={handleCheckin}
-        className="w-full bg-card/70 border border-border/50 rounded-3xl p-5 flex items-center gap-4 text-left hover:bg-secondary/30 transition-all group shadow-soft"
+        className="w-full bg-card border border-border rounded-2xl p-5 flex items-center gap-4 text-left hover:bg-secondary/30 transition-colors group"
       >
         <div
-          className={`w-11 h-11 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+          className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
             checked
-              ? "bg-primary text-primary-foreground shadow-glow"
-              : "border-2 border-muted-foreground/20 text-muted-foreground group-hover:border-primary/40 group-hover:text-primary"
+              ? "bg-primary text-primary-foreground"
+              : "border-2 border-muted-foreground/30 text-muted-foreground group-hover:border-primary/50 group-hover:text-primary"
           }`}
         >
           {checked ? <Check size={20} /> : <PenLine size={18} />}
         </div>
         <div>
-          <p className="font-serif text-foreground font-medium italic">
+          <p className="font-serif text-foreground font-medium">
             {checked ? "Checked in for today" : "Did you write today?"}
           </p>
           <p className="text-xs text-muted-foreground font-sans mt-0.5">
