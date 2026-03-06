@@ -47,9 +47,9 @@ export default function Stats() {
       {/* Stats grid */}
       <div className="grid grid-cols-3 gap-3 animate-fade-up-delay-2">
         <div className="bg-card border border-border rounded-2xl p-4 text-center">
-          <Clock size={18} className="text-muted-foreground mx-auto mb-2" />
-          <p className="text-lg font-serif font-semibold text-foreground">{timeStr}</p>
-          <p className="text-[10px] text-muted-foreground font-sans mt-0.5">time writing</p>
+          <Compass size={18} className="text-muted-foreground mx-auto mb-2" />
+          <p className="text-lg font-serif font-semibold text-foreground">{journeyCount}</p>
+          <p className="text-[10px] text-muted-foreground font-sans mt-0.5">journeys done</p>
         </div>
         <div className="bg-card border border-border rounded-2xl p-4 text-center">
           <BookOpen size={18} className="text-muted-foreground mx-auto mb-2" />
