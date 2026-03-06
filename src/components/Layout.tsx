@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Compass, Camera, BarChart3, Volume2, VolumeX } from "lucide-react";
+import { Home, Compass, Camera, BarChart3, Volume2, VolumeX, Moon, Sun } from "lucide-react";
 import { useAmbientSound } from "@/hooks/use-ambient-sound";
+import { useTheme } from "next-themes";
 import SoundPlayer from "./SoundPlayer";
 import { useState } from "react";
 
