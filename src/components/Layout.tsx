@@ -26,13 +26,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <h1 className="text-xl font-serif font-semibold tracking-tight text-foreground">
             ink
           </h1>
-          <button
-            onClick={() => setShowSound(!showSound)}
-            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-            aria-label="Toggle sound player"
-          >
-            {ambient.playing ? <Volume2 size={20} /> : <VolumeX size={20} />}
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+              aria-label="Toggle dark mode"
+            >
+              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+            <button
+              onClick={() => setShowSound(!showSound)}
+              className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+              aria-label="Toggle sound player"
+            >
+              {ambient.playing ? <Volume2 size={20} /> : <VolumeX size={20} />}
+            </button>
+          </div>
         </div>
         {showSound && (
           <div className="border-t border-border">
