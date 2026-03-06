@@ -25,6 +25,8 @@ function savePromptState(promptIndex: number) {
 export default function Index() {
   const navigate = useNavigate();
   const today = new Date();
+  const hour = today.getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
   const dateStr = today.toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
