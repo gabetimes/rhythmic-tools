@@ -59,7 +59,7 @@ export const journeys: Journey[] = [
       },
       {
         prompt: "What is the worst case you're imagining?",
-        durationMinutes: 6,
+        durationMinutes: 5,
         instruction: "Write it out fully. Go through the worst case scenario.",
       },
       {
