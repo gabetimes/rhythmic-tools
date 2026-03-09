@@ -100,7 +100,7 @@ export const journeys: Journey[] = [
     title: "Gratitude Deep Dive",
     description: "Go beyond 'I'm grateful for...' into the texture of thankfulness.",
     icon: "heart",
-    totalMinutes: 15,
+    totalMinutes: 25,
     steps: [
       {
         prompt: "Describe one person who made your day better recently. What exactly did they do, and how did it land?",
