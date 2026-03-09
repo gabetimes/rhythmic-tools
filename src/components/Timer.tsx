@@ -80,6 +80,34 @@ export default function Timer({ durationMinutes, onComplete, isActive, noTimer, 
   const circumference = 2 * Math.PI * radius;
   const dashOffset = circumference * (1 - progress);
 
+  if (noTimer) {
+    return (
+      <div className="flex flex-col items-center gap-6">
+        <div className="relative w-48 h-48">
+          <svg className="w-full h-full -rotate-90" viewBox="0 0 160 160">
+            <circle
+              cx="80"
+              cy="80"
+              r={radius}
+              fill="none"
+              stroke="hsl(var(--secondary))"
+              strokeWidth="4"
+            />
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="text-sm text-muted-foreground">no time limit</span>
+          </div>
+        </div>
+        <button
+          onClick={() => onCompleteRef.current()}
+          className="px-8 py-3 rounded-full bg-primary text-primary-foreground font-medium text-sm tracking-wide hover:opacity-90 transition-opacity"
+        >
+          {noTimerLabel || "Done"}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center gap-6">
       <div className="relative w-48 h-48">
