@@ -49,7 +49,7 @@ export const journeys: Journey[] = [
     steps: [
       {
         prompt: "Write down all anxious thoughts swirling in your mind right now.",
-        durationMinutes: 5,
+        durationMinutes: 7,
         instruction: "Just dump, without trying to solve anything right now.",
       },
       {
