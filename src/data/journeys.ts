@@ -41,23 +41,28 @@ export const journeys: Journey[] = [
   {
     id: "anxiety-release",
     title: "Anxiety Release",
-    description: "A gentle practice to untangle anxious thoughts on paper.",
+    description: "A guided practice to untangle anxious thoughts on paper.",
     icon: "wind",
-    totalMinutes: 22,
+    totalMinutes: 27,
     steps: [
       {
-        prompt: "Write down every anxious thought swirling in your mind right now. Don't organize — just dump.",
+        prompt: "Write down all anxious thoughts swirling in your mind right now. Just dump, without trying to solve anything.",
         durationMinutes: 5,
         instruction: "Stream of consciousness. No pauses.",
       },
       {
-        prompt: "Pick the loudest worry. Describe it as if it were a weather pattern — what kind of storm is it?",
+        prompt: "Pick the loudest worry. Describe it as if it were a weather pattern. What kind of storm is it?",
         durationMinutes: 6,
         instruction: "Use metaphor to create distance.",
       },
       {
-        prompt: "What is the worst case you're imagining? Write it out fully. Then write what's most likely instead.",
+        prompt: "What is the worst case you're imagining?",
         durationMinutes: 6,
+        instruction: "Write it out fully. Go through the worst case scenario.",
+      },
+      {
+        prompt: "What could you still do? Who could help? What could happen instead?",
+        durationMinutes: 5,
         instruction: "Challenge the narrative.",
       },
       {
