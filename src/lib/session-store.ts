@@ -29,7 +29,7 @@ export function getSessions(): SessionRecord[] {
   }
 }
 
-export function logSession(minutes: number, type: "prompt" | "journey" = "prompt") {
+export function logSession(minutes: number, type: "prompt" | "journey" | "capture" = "prompt") {
   const sessions = getSessions();
   const today = new Date().toISOString().split("T")[0];
   sessions.push({ date: today, minutes, type });
