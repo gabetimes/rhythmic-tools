@@ -105,17 +105,17 @@ export const journeys: Journey[] = [
       {
         prompt: "Describe one person who made your day better recently. What exactly did they do, and how did it land?",
         durationMinutes: 5,
-        instruction: "Be specific and vivid.",
+        instruction: "Be specific and vivid. How did it feel?",
       },
       {
-        prompt: "Write about a difficulty that, looking back, taught you something valuable. Thank it.",
+        prompt: "Write about a difficulty that, looking back, taught you something valuable. What are you thankful for today?",
         durationMinutes: 5,
         instruction: "Find the hidden gift.",
       },
       {
         prompt: "What part of your daily routine do you usually overlook? Write a love letter to that small ritual.",
         durationMinutes: 5,
-        instruction: "Celebrate the mundane.",
+        instruction: "Celebrate the little things to keep things special.",
       },
     ],
   },
@@ -128,13 +128,8 @@ export const journeys: Journey[] = [
     steps: [
       {
         prompt: "Begin writing. Don't think, don't edit, don't stop. Let whatever is inside come out onto the page.",
-        durationMinutes: 10,
-        instruction: "Keep the pen moving. Always.",
-      },
-      {
-        prompt: "Continue. You're past the surface now. What's underneath? Keep going.",
-        durationMinutes: 10,
-        instruction: "Go deeper. No stopping.",
+        durationMinutes: 20,
+        instruction: "Keep the pen moving to see what's underneath.",
       },
     ],
   },
