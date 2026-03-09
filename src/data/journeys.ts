@@ -21,7 +21,7 @@ export const journeys: Journey[] = [
     title: "The Weekly Review",
     description: "Reflect on the past week with honesty and compassion.",
     icon: "calendar-days",
-    totalMinutes: 20,
+    totalMinutes: 19,
     steps: [
       {
         prompt: "What moments from this week made you feel most alive? Let every small flicker count.",
@@ -35,7 +35,7 @@ export const journeys: Journey[] = [
       },
       {
         prompt: "What is one intention you want to carry into next week? What is one promise you want to make to yourself?",
-        durationMinutes: 6,
+        durationMinutes: 5,
         instruction: "Close with clarity.",
       },
     ],
@@ -45,21 +45,21 @@ export const journeys: Journey[] = [
     title: "Anxiety Release",
     description: "A guided practice to untangle anxious thoughts on paper.",
     icon: "wind",
-    totalMinutes: 27,
+    totalMinutes: 32,
     steps: [
       {
         prompt: "Write down all anxious thoughts swirling in your mind right now.",
-        durationMinutes: 5,
+        durationMinutes: 7,
         instruction: "Just dump, without trying to solve anything right now.",
       },
       {
         prompt: "Pick the loudest worry. Describe it as if it were a weather pattern. What kind of storm is it?",
-        durationMinutes: 6,
+        durationMinutes: 5,
         instruction: "Use metaphor to create distance.",
       },
       {
         prompt: "What is the worst case you're imagining?",
-        durationMinutes: 6,
+        durationMinutes: 5,
         instruction: "Write it out fully. Go through the worst case scenario.",
       },
       {
@@ -79,11 +79,11 @@ export const journeys: Journey[] = [
     title: "Creative Unblocking",
     description: "Shake loose the ideas stuck behind your inner critic.",
     icon: "sparkles",
-    totalMinutes: 15,
+    totalMinutes: 20,
     steps: [
       {
         prompt: "Write down everything that's bothering you, blocking you, or distracting you.",
-        durationMinutes: 10,
+        durationMinutes: 20,
         instruction: "Brain dump to clear mental capacity.",
       },
       {
@@ -100,7 +100,7 @@ export const journeys: Journey[] = [
     title: "Gratitude Deep Dive",
     description: "Go beyond 'I'm grateful for...' into the texture of thankfulness.",
     icon: "heart",
-    totalMinutes: 15,
+    totalMinutes: 25,
     steps: [
       {
         prompt: "Describe one person who made your day better recently. What exactly did they do, and how did it land?",
@@ -109,12 +109,12 @@ export const journeys: Journey[] = [
       },
       {
         prompt: "Write about a difficulty that, looking back, taught you something valuable. What are you thankful for today?",
-        durationMinutes: 5,
+        durationMinutes: 10,
         instruction: "Find the hidden gift.",
       },
       {
         prompt: "What part of your daily routine do you usually overlook? Write a love letter to that small ritual.",
-        durationMinutes: 5,
+        durationMinutes: 10,
         instruction: "Celebrate the little things to keep things special.",
       },
     ],
