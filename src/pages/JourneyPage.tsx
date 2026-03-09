@@ -22,7 +22,7 @@ export default function JourneyPage() {
     return (
       <div className="text-center py-20">
         <p className="text-muted-foreground">Journey not found.</p>
-        <button onClick={() => navigate("/exercises")} className="text-primary underline mt-2 text-sm">
+        <button onClick={() => navigate("/ink/exercises")} className="text-primary underline mt-2 text-sm">
           Back to Journeys
         </button>
       </div>
@@ -42,7 +42,7 @@ export default function JourneyPage() {
           You showed up for yourself today. That matters more than the words on the page.
         </p>
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/ink")}
           className="mt-8 px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium text-sm"
         >
           Return Home
@@ -59,7 +59,7 @@ export default function JourneyPage() {
       {/* Header */}
       <div className="flex items-center gap-3 animate-fade-up">
         <button
-          onClick={() => navigate("/exercises")}
+          onClick={() => navigate("/ink/exercises")}
           className="p-2 -ml-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
         >
           <ArrowLeft size={20} />

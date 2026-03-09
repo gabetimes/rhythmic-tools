@@ -41,7 +41,7 @@ export default function Spaces() {
           </p>
         </div>
         <button
-          onClick={() => navigate("/capture")}
+          onClick={() => navigate("/ink/capture")}
           className="p-2.5 rounded-xl bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
         >
           <Plus size={18} />
@@ -58,7 +58,7 @@ export default function Spaces() {
             Take a photo of where you write.
           </p>
           <button
-            onClick={() => navigate("/capture")}
+            onClick={() => navigate("/ink/capture")}
             className="mt-4 px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-medium"
           >
             Capture First Space

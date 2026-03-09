@@ -3,7 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "@/components/Layout";
+import InkLayout from "@/components/InkLayout";
+import ComingSoon from "./pages/ComingSoon";
 import Index from "./pages/Index";
 import Exercises from "./pages/Exercises";
 import JourneyPage from "./pages/JourneyPage";
@@ -20,17 +21,61 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/exercises" element={<Exercises />} />
-            <Route path="/journey/:id" element={<JourneyPage />} />
-            <Route path="/capture" element={<Capture />} />
-            <Route path="/spaces" element={<Spaces />} />
-            <Route path="/stats" element={<Stats />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
+        <Routes>
+          {/* Coming Soon homepage */}
+          <Route path="/" element={<ComingSoon />} />
+
+          {/* Ink tool routes */}
+          <Route
+            path="/ink"
+            element={
+              <InkLayout>
+                <Index />
+              </InkLayout>
+            }
+          />
+          <Route
+            path="/ink/exercises"
+            element={
+              <InkLayout>
+                <Exercises />
+              </InkLayout>
+            }
+          />
+          <Route
+            path="/ink/journey/:id"
+            element={
+              <InkLayout>
+                <JourneyPage />
+              </InkLayout>
+            }
+          />
+          <Route
+            path="/ink/capture"
+            element={
+              <InkLayout>
+                <Capture />
+              </InkLayout>
+            }
+          />
+          <Route
+            path="/ink/spaces"
+            element={
+              <InkLayout>
+                <Spaces />
+              </InkLayout>
+            }
+          />
+          <Route
+            path="/ink/stats"
+            element={
+              <InkLayout>
+                <Stats />
+              </InkLayout>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
