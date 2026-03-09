@@ -83,7 +83,7 @@ export const journeys: Journey[] = [
     steps: [
       {
         prompt: "Write down everything that's bothering you, blocking you, or distracting you.",
-        durationMinutes: 20,
+        durationMinutes: 10,
         instruction: "Brain dump to clear mental capacity.",
       },
       {
