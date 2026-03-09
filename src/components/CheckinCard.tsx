@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { hasCheckedInToday, logCheckin } from "@/lib/session-store";
+import { trackNewEntry } from "@/lib/analytics/web";
 import { PenLine, Check } from "lucide-react";
 
 export default function CheckinCard() {
@@ -10,6 +11,7 @@ export default function CheckinCard() {
   const handleCheckin = () => {
     if (checked) return;
     logCheckin();
+    trackNewEntry();
     setChecked(true);
     setTimeout(() => setFading(true), 1200);
     setTimeout(() => setHidden(true), 1700);

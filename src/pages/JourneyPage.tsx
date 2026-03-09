@@ -3,6 +3,7 @@ import { useState, useCallback } from "react";
 import { journeys } from "@/data/journeys";
 import { useChime } from "@/hooks/use-chime";
 import { logCheckin, logSession } from "@/lib/session-store";
+import { trackCompleteJourney, trackStartJourney } from "@/lib/analytics/web";
 import Timer from "@/components/Timer";
 import { ArrowLeft, Check } from "lucide-react";
 
@@ -53,6 +54,12 @@ export default function JourneyPage() {
 
   const step = journey.steps[currentStep];
   const isLast = currentStep === journey.steps.length - 1;
+  const completeJourney = () => {
+    logCheckin();
+    logSession(0, "journey");
+    trackCompleteJourney(journey.title);
+    setCompleted(true);
+  };
 
   return (
     <div className="space-y-6">
@@ -101,11 +108,10 @@ export default function JourneyPage() {
         <Timer
           key={currentStep}
           durationMinutes={step.durationMinutes}
+          onStart={currentStep === 0 ? () => trackStartJourney(journey.title) : undefined}
           onComplete={step.noTimer ? () => {
             if (isLast) {
-              logCheckin();
-              logSession(0, "journey");
-              setCompleted(true);
+              completeJourney();
             } else {
               setCurrentStep((s) => s + 1);
             }
@@ -122,9 +128,7 @@ export default function JourneyPage() {
           <button
             onClick={() => {
               if (isLast) {
-                logCheckin();
-                logSession(0, "journey");
-                setCompleted(true);
+                completeJourney();
               } else {
                 setCurrentStep((s) => s + 1);
               }
