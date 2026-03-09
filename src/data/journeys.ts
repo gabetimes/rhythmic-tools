@@ -45,7 +45,7 @@ export const journeys: Journey[] = [
     title: "Anxiety Release",
     description: "A guided practice to untangle anxious thoughts on paper.",
     icon: "wind",
-    totalMinutes: 27,
+    totalMinutes: 32,
     steps: [
       {
         prompt: "Write down all anxious thoughts swirling in your mind right now.",
