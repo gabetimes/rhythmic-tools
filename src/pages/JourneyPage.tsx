@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useCallback } from "react";
 import { journeys } from "@/data/journeys";
 import { useChime } from "@/hooks/use-chime";
-import { logCheckin } from "@/lib/session-store";
+import { logCheckin, logSession } from "@/lib/session-store";
 import Timer from "@/components/Timer";
 import { ArrowLeft, Check } from "lucide-react";
 
