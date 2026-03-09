@@ -17,12 +17,12 @@ export const journeys: Journey[] = [
   {
     id: "weekly-review",
     title: "The Weekly Review",
-    description: "Reflect on the past seven days with honesty and compassion.",
+    description: "Reflect on the past week with honesty and compassion.",
     icon: "calendar-days",
     totalMinutes: 20,
     steps: [
       {
-        prompt: "What moments from this week made you feel most alive? Don't filter — let every small flicker count.",
+        prompt: "What moments from this week made you feel most alive? Let every small flicker count.",
         durationMinutes: 7,
         instruction: "Write freely. No editing.",
       },
@@ -32,7 +32,7 @@ export const journeys: Journey[] = [
         instruction: "Be honest with yourself.",
       },
       {
-        prompt: "What is one intention you want to carry into next week? Write it as a promise to yourself.",
+        prompt: "What is one intention you want to carry into next week? What is one promise you want to make to yourself?",
         durationMinutes: 6,
         instruction: "Close with clarity.",
       },
