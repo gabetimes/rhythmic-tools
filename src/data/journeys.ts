@@ -79,7 +79,7 @@ export const journeys: Journey[] = [
     title: "Creative Unblocking",
     description: "Shake loose the ideas stuck behind your inner critic.",
     icon: "sparkles",
-    totalMinutes: 15,
+    totalMinutes: 20,
     steps: [
       {
         prompt: "Write down everything that's bothering you, blocking you, or distracting you.",
