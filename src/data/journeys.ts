@@ -109,7 +109,7 @@ export const journeys: Journey[] = [
       },
       {
         prompt: "Write about a difficulty that, looking back, taught you something valuable. What are you thankful for today?",
-        durationMinutes: 5,
+        durationMinutes: 10,
         instruction: "Find the hidden gift.",
       },
       {
