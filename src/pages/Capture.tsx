@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Camera, ImagePlus, ArrowLeft } from "lucide-react";
 import { getCurrentPrompt } from "@/data/prompts";
 import { getTodayMood } from "@/components/MoodTracker";
+import { logCheckin } from "@/lib/session-store";
 
 interface CapturedSpace {
   id: string;
