@@ -3,7 +3,7 @@
 export interface SessionRecord {
   date: string; // YYYY-MM-DD
   minutes: number;
-  type: "prompt" | "journey" | "checkin";
+  type: "prompt" | "journey" | "checkin" | "capture";
 }
 
 export function hasCheckedInToday(): boolean {
