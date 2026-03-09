@@ -1,73 +1,124 @@
-# Welcome to your Lovable project
+# Rhythmic Tools
 
-## Project info
+A collection of web-based tools for solving everyday problems and supporting self-discovery, built by Rhythmic, Inc.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**Live site:** [rhythmic-tools.com](https://rhythmic-tools.com)
 
-## How can I edit this code?
+## Stack
 
-There are several ways of editing your application.
+- **Framework:** React 18 + TypeScript + Vite
+- **Styling:** Tailwind CSS 3 with `tailwindcss-animate`
+- **Components:** shadcn/ui (Radix UI primitives)
+- **Routing:** React Router v6
+- **State:** React Query for async state, localStorage for persistence
+- **Package manager:** bun (preferred) or npm
+- **Testing:** Vitest + Testing Library
 
-**Use Lovable**
+## Getting Started
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+bun install
+bun run dev      # starts on port 8080
+bun run build    # production build
+bun run test     # run tests
 ```
 
-**Edit a file directly in GitHub**
+## Architecture
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Layouts
 
-**Use GitHub Codespaces**
+The site uses two layout systems:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- **`SiteLayout`** (`src/components/SiteLayout.tsx`) — Wraps the homepage and legal pages (terms, privacy). Includes `SiteHeader` and `SiteFooter`.
+- **`InkLayout`** (`src/components/InkLayout.tsx`) — Wraps all `/ink/*` routes. Has its own sticky header (with dark mode toggle, ambient sound controls) and a fixed bottom tab nav. Also includes `SiteFooter` for legal link access.
 
-## What technologies are used for this project?
+### Sitewide Components
 
-This project is built with:
+- **`SiteHeader`** (`src/components/SiteHeader.tsx`) — Top bar with "Rhythmic Tools" branding and a "View Our Tools" link to the homepage.
+- **`SiteFooter`** (`src/components/SiteFooter.tsx`) — Footer with links to Privacy Policy, Terms of Service, and a "Do Not Sell or Share My Personal Information" mailto link. Appears on all pages (both `SiteLayout` and `InkLayout`).
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Routing (defined in `src/App.tsx`)
 
-## How can I deploy this project?
+| Path | Layout | Page Component |
+|------|--------|----------------|
+| `/` | SiteLayout | `ComingSoon` |
+| `/terms` | SiteLayout | `Terms` |
+| `/privacy` | SiteLayout | `Privacy` |
+| `/ink` | InkLayout | `Index` (daily prompts) |
+| `/ink/exercises` | InkLayout | `Exercises` (guided journeys) |
+| `/ink/journey/:id` | InkLayout | `JourneyPage` |
+| `/ink/capture` | InkLayout | `Capture` |
+| `/ink/spaces` | InkLayout | `Spaces` |
+| `/ink/stats` | InkLayout | `Stats` (practice tracking) |
+| `*` | none | `NotFound` |
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+### Tools
 
-## Can I connect a custom domain to my Lovable project?
+Each tool lives under its own route prefix with its own layout, data, and design.
 
-Yes, you can!
+**Ink** (`/ink`) — A minimalist digital companion for pen-and-paper journaling. Features:
+- Daily writing prompts (110 prompts, 3 shown per day based on day-of-year)
+- Guided journeys (5 multi-step timed exercises)
+- Mood check-ins with tracking
+- Writing space capture
+- Ambient sounds (rain, lofi, forest) via Web Audio API
+- Session/streak tracking persisted to localStorage
+- Dark mode support
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Key Directories
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+```
+src/
+├── components/          # App components
+│   ├── ui/              # shadcn/ui primitives (48 components)
+│   ├── SiteLayout.tsx   # Homepage + legal page wrapper
+│   ├── SiteHeader.tsx   # Sitewide top header
+│   ├── SiteFooter.tsx   # Sitewide footer with legal links
+│   ├── InkLayout.tsx    # Ink tool layout (header + bottom nav + footer)
+│   ├── SoundPlayer.tsx  # Ambient sound UI
+│   ├── MoodTracker.tsx  # Mood check-in component
+│   ├── CheckinCard.tsx  # Check-in display card
+│   └── Timer.tsx        # Countdown timer for journeys
+├── pages/               # Route-level page components
+│   ├── ComingSoon.tsx   # Homepage
+│   ├── Terms.tsx        # Terms of Service
+│   ├── Privacy.tsx      # Privacy Policy
+│   ├── Index.tsx        # Ink daily view
+│   ├── Exercises.tsx    # Ink guided journeys list
+│   ├── JourneyPage.tsx  # Single journey view
+│   ├── Capture.tsx      # Writing capture
+│   ├── Spaces.tsx       # Spaces gallery
+│   ├── Stats.tsx        # Practice stats dashboard
+│   └── NotFound.tsx     # 404 page
+├── data/
+│   ├── prompts.ts       # 110 daily writing prompts + selection logic
+│   └── journeys.ts      # 5 guided journey definitions
+├── hooks/
+│   ├── use-ambient-sound.ts  # Web Audio ambient sound engine
+│   ├── use-chime.ts          # Three-note chime sound
+│   ├── use-mobile.tsx         # Mobile breakpoint detection (768px)
+│   └── use-toast.ts          # Toast notification state
+├── lib/
+│   ├── utils.ts              # cn() class name utility
+│   └── session-store.ts      # localStorage session/streak persistence
+└── test/
+    ├── setup.ts
+    └── example.test.ts
+```
+
+## Design System
+
+Defined in `DESIGN.md`. Key points:
+
+- **Typography:** Lora (serif, headings) + Source Sans 3 (sans, body)
+- **Colors:** Warm earthy palette — sage green primary, terracotta accent, warm beige secondary
+- **Dark mode:** Class-based, first-class support
+- **Layout:** Mobile-first, max-w-lg (512px) for tool content, max-w-3xl for site pages
+- **Motion:** Subtle fade-up animations at 0.15s stagger intervals
+
+## Configuration Files
+
+- `vite.config.ts` — Dev server on port 8080, `@` path alias to `src/`
+- `tailwind.config.ts` — Custom fonts, CSS variable-based color tokens, class-based dark mode
+- `components.json` — shadcn/ui configuration
+- `tsconfig.json` — TypeScript config with path aliases
