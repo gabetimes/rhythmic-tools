@@ -8,7 +8,7 @@ interface TimerProps {
   noTimerLabel?: string;
 }
 
-export default function Timer({ durationMinutes, onComplete, isActive }: TimerProps) {
+export default function Timer({ durationMinutes, onComplete, isActive, noTimer, noTimerLabel }: TimerProps) {
   const totalSeconds = durationMinutes * 60;
   const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
   const [running, setRunning] = useState(false);
