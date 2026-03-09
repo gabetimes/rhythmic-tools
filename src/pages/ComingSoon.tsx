@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export default function ComingSoon() {
   return (
@@ -17,6 +18,9 @@ export default function ComingSoon() {
                 A minimalist digital companion for pen-and-paper journaling. Daily prompts, guided journeys, mood tracking, and ambient sounds to deepen your writing practice.
               </CardDescription>
             </CardHeader>
+            <CardFooter>
+              <Button variant="default">Try it Now</Button>
+            </CardFooter>
           </Card>
         </Link>
       </div>
