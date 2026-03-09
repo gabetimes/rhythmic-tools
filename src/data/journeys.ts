@@ -114,7 +114,7 @@ export const journeys: Journey[] = [
       },
       {
         prompt: "What part of your daily routine do you usually overlook? Write a love letter to that small ritual.",
-        durationMinutes: 5,
+        durationMinutes: 10,
         instruction: "Celebrate the little things to keep things special.",
       },
     ],
