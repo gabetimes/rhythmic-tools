@@ -262,7 +262,7 @@ export default function Index() {
       {/* Start Session */}
       <div className="animate-fade-up-delay-2">
         <button
-          onClick={() => navigate("/exercises")}
+          onClick={() => navigate("/ink/exercises")}
           className="w-full flex items-center justify-between bg-primary text-primary-foreground rounded-2xl p-5 hover:opacity-90 transition-opacity group"
         >
           <div className="text-left">
@@ -281,7 +281,7 @@ export default function Index() {
       {/* Capture */}
       <div className="animate-fade-up-delay-2">
         <button
-          onClick={() => navigate("/capture")}
+          onClick={() => navigate("/ink/capture")}
           className="w-full flex items-center justify-between bg-card text-card-foreground border border-border rounded-2xl p-5 hover:bg-secondary/50 transition-colors group"
         >
           <div className="text-left">

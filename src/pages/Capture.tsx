@@ -72,14 +72,14 @@ export default function Capture() {
     logCheckin();
     logSession(0, "capture");
     setSaved(true);
-    setTimeout(() => navigate("/spaces"), 1500);
+    setTimeout(() => navigate("/ink/spaces"), 1500);
   };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3 animate-fade-up">
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/ink")}
           className="p-2 -ml-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
         >
           <ArrowLeft size={20} />

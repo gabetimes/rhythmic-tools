@@ -28,7 +28,7 @@ export default function Exercises() {
           return (
             <button
               key={journey.id}
-              onClick={() => navigate(`/journey/${journey.id}`)}
+              onClick={() => navigate(`/ink/journey/${journey.id}`)}
               className="w-full text-left bg-card border border-border rounded-2xl p-5 hover:bg-secondary/40 transition-colors group animate-fade-up"
               style={{ animationDelay: `${i * 0.08}s` }}
             >
