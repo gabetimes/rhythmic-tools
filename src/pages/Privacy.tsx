@@ -489,13 +489,11 @@ export default function Privacy() {
         6. Sensitive Data
       </h2>
       <p className="mb-4">
-        Our Product focuses on supporting stress reduction and burnout awareness.
-        While we are not a medical provider and do not collect &ldquo;Protected
-        Health Information&rdquo; under HIPAA, we understand that data regarding
-        your mood, burnout symptoms, and reflections is sensitive. We treat this
+        Our Product focuses on solving everyday challenges, self-discovery, and self-regulation.
+        We are not a medical provider and do not collect &ldquo;Protected
+        Health Information&rdquo; under HIPAA, we understand that any data you may provide us within your journaling or self-reflections may contain sensitive information. We treat this
         as <strong>Special Category Data</strong>. We process this data solely to
-        provide the Service to you. Check-in data, reflections, chat transcripts,
-        and journaling data remain private to you and are not shared externally
+        provide the Service to you. Your data remain private to you and are not shared externally
         unless you choose to export or disclose them.
       </p>
 
