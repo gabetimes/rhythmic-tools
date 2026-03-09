@@ -69,6 +69,7 @@ export default function Capture() {
       timestamp: Date.now(),
       ...(mood ? { mood } : {}),
     });
+    logCheckin();
     setSaved(true);
     setTimeout(() => navigate("/spaces"), 1500);
   };

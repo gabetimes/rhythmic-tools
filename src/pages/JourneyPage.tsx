@@ -112,7 +112,7 @@ export default function JourneyPage() {
           onClick={() => {
             if (isLast) {
               logCheckin();
-              setCompleted(true);
+              logSession(0, "journey");
               setCompleted(true);
             } else {
               setCurrentStep((s) => s + 1);
