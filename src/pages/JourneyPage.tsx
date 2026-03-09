@@ -101,8 +101,18 @@ export default function JourneyPage() {
         <Timer
           key={currentStep}
           durationMinutes={step.durationMinutes}
-          onComplete={handleTimerComplete}
+          onComplete={step.noTimer ? () => {
+            if (isLast) {
+              logCheckin();
+              logSession(0, "journey");
+              setCompleted(true);
+            } else {
+              setCurrentStep((s) => s + 1);
+            }
+          } : handleTimerComplete}
           isActive={true}
+          noTimer={step.noTimer}
+          noTimerLabel={step.noTimerLabel}
         />
       </div>
 
