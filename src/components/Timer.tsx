@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 interface TimerProps {
   durationMinutes: number;
@@ -10,22 +10,65 @@ export default function Timer({ durationMinutes, onComplete, isActive }: TimerPr
   const totalSeconds = durationMinutes * 60;
   const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
   const [running, setRunning] = useState(false);
+  const endTimeRef = useRef<number | null>(null);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
+  // Reset when duration changes
   useEffect(() => {
     setSecondsLeft(totalSeconds);
     setRunning(false);
+    endTimeRef.current = null;
   }, [totalSeconds]);
 
+  // Start/stop: track wall-clock end time
+  useEffect(() => {
+    if (running && !endTimeRef.current) {
+      endTimeRef.current = Date.now() + secondsLeft * 1000;
+    }
+    if (!running) {
+      // When paused, clear end time (secondsLeft already holds remaining)
+      endTimeRef.current = null;
+    }
+  }, [running]);
+
+  // Wall-clock based tick — survives screen lock
   useEffect(() => {
     if (!running || !isActive) return;
-    if (secondsLeft <= 0) {
-      setRunning(false);
-      onComplete();
-      return;
+
+    const tick = () => {
+      if (!endTimeRef.current) return;
+      const remaining = Math.max(0, Math.round((endTimeRef.current - Date.now()) / 1000));
+      setSecondsLeft(remaining);
+      if (remaining <= 0) {
+        setRunning(false);
+        endTimeRef.current = null;
+        playSingingBowl();
+        onCompleteRef.current();
+      }
+    };
+
+    tick(); // immediate sync on resume / visibility change
+    const id = setInterval(tick, 1000);
+
+    // Re-sync when tab/screen becomes visible again
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") tick();
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, [running, isActive]);
+
+  // Request notification permission early
+  useEffect(() => {
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission();
     }
-    const id = setInterval(() => setSecondsLeft((s) => s - 1), 1000);
-    return () => clearInterval(id);
-  }, [running, secondsLeft, isActive, onComplete]);
+  }, []);
 
   const progress = 1 - secondsLeft / totalSeconds;
   const minutes = Math.floor(secondsLeft / 60);
@@ -78,4 +121,60 @@ export default function Timer({ durationMinutes, onComplete, isActive }: TimerPr
       </button>
     </div>
   );
+}
+
+/** Tibetan singing bowl sound using Web Audio API */
+function playSingingBowl() {
+  try {
+    const ctx = new AudioContext();
+    const now = ctx.currentTime;
+
+    // Fundamental + harmonics of a singing bowl
+    const frequencies = [262, 524, 786, 1048];
+    const gains = [0.2, 0.12, 0.06, 0.03];
+    const decays = [4, 3, 2.5, 2];
+
+    frequencies.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, now);
+      // Slight detuning for warmth
+      osc.detune.setValueAtTime(Math.random() * 6 - 3, now);
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(gains[i], now + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + decays[i]);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + decays[i]);
+    });
+
+    // Second strike slightly delayed for resonance
+    setTimeout(() => {
+      const now2 = ctx.currentTime;
+      frequencies.slice(0, 2).forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, now2);
+        osc.detune.setValueAtTime(Math.random() * 4 - 2, now2);
+        gain.gain.setValueAtTime(0, now2);
+        gain.gain.linearRampToValueAtTime(gains[i] * 0.5, now2 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now2 + 3);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now2);
+        osc.stop(now2 + 3);
+      });
+    }, 1500);
+
+    // Send notification if screen is locked / tab hidden
+    if (document.visibilityState === "hidden" && "Notification" in window && Notification.permission === "granted") {
+      new Notification("Timer Complete 🔔", {
+        body: "Your writing session is done. Take a breath.",
+        icon: "/favicon.ico",
+      });
+    }
+  } catch (e) {
+    console.log("Audio not available");
+  }
 }
