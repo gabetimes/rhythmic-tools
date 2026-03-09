@@ -21,7 +21,7 @@ export const journeys: Journey[] = [
     title: "The Weekly Review",
     description: "Reflect on the past week with honesty and compassion.",
     icon: "calendar-days",
-    totalMinutes: 20,
+    totalMinutes: 19,
     steps: [
       {
         prompt: "What moments from this week made you feel most alive? Let every small flicker count.",
