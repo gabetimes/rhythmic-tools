@@ -2,6 +2,8 @@ export interface JourneyStep {
   prompt: string;
   durationMinutes: number;
   instruction?: string;
+  noTimer?: boolean;
+  noTimerLabel?: string;
 }
 
 export interface Journey {
