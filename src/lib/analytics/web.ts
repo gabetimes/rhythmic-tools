@@ -1,16 +1,30 @@
 const GA_MEASUREMENT_ID = "G-NGV5NZ8WLY";
 const GA_SCRIPT_SRC = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-const AMPLITUDE_API_KEY = "1286cf365cfb1fe70cd1c3a7fcf5aeae";
-const AMPLITUDE_SCRIPT_SRC = "https://cdn.amplitude.com/script/1286cf365cfb1fe70cd1c3a7fcf5aeae.js";
+const AMPLITUDE_API_KEY = "631fe8d9fa9f774cd421f8cb364771f6";
+const AMPLITUDE_SCRIPT_SRC = `https://cdn.amplitude.com/script/${AMPLITUDE_API_KEY}.js`;
+const META_PIXEL_ID = "911632511796528";
+const META_PIXEL_SCRIPT_SRC = "https://connect.facebook.net/en_US/fbevents.js";
+
+type EventProperties = Record<string, string | number | boolean | null | undefined>;
 
 declare global {
   interface AmplitudeGlobal {
     add: (plugin: unknown) => void;
     init: (apiKey: string, options: Record<string, unknown>) => void;
+    track?: (eventName: string, eventProperties?: Record<string, unknown>) => void;
   }
 
   interface SessionReplayGlobal {
     plugin: (options: { sampleRate: number }) => unknown;
+  }
+
+  interface MetaPixelQueueFunction {
+    (...args: unknown[]): void;
+    callMethod?: (...args: unknown[]) => void;
+    queue: unknown[][];
+    loaded?: boolean;
+    version?: string;
+    push?: (...args: unknown[]) => void;
   }
 
   interface Window {
@@ -18,12 +32,26 @@ declare global {
     gtag: (...args: unknown[]) => void;
     amplitude?: AmplitudeGlobal;
     sessionReplay?: SessionReplayGlobal;
+    fbq?: MetaPixelQueueFunction;
+    _fbq?: MetaPixelQueueFunction;
   }
 }
 
 let analyticsInitialized = false;
 let amplitudePrepared = false;
 let amplitudeInitialized = false;
+let metaPixelPrepared = false;
+let metaPixelInitialized = false;
+
+function normalizeProperties(properties: EventProperties = {}) {
+  const normalized: Record<string, string | number | boolean | null> = {};
+  for (const [key, value] of Object.entries(properties)) {
+    if (value !== undefined) {
+      normalized[key] = value;
+    }
+  }
+  return normalized;
+}
 
 function getOrCreateScriptTag(id: string, src: string): HTMLScriptElement {
   const existing = document.getElementById(id);
@@ -42,8 +70,8 @@ function initializeGoogleAnalytics() {
   getOrCreateScriptTag("ga-gtag", GA_SCRIPT_SRC);
 
   window.dataLayer = window.dataLayer || [];
-  window.gtag = window.gtag || function gtag(...args: unknown[]) {
-    window.dataLayer.push(args);
+  window.gtag = window.gtag || function gtag() {
+    window.dataLayer.push(arguments);
   };
 
   window.gtag("js", new Date());
@@ -62,6 +90,42 @@ function initializeAmplitude() {
     autocapture: true,
   });
   amplitudeInitialized = true;
+}
+
+function ensureMetaPixelQueueFunction() {
+  if (window.fbq) return;
+
+  const fbq = function (...args: unknown[]) {
+    if (fbq.callMethod) {
+      fbq.callMethod(...args);
+      return;
+    }
+
+    fbq.queue.push(args);
+  } as MetaPixelQueueFunction;
+
+  if (!window._fbq) {
+    window._fbq = fbq;
+  }
+
+  fbq.queue = [];
+  fbq.push = (...args: unknown[]) => fbq(...args);
+  fbq.loaded = true;
+  fbq.version = "2.0";
+  window.fbq = fbq;
+}
+
+export function prepareMetaPixelTag() {
+  if (metaPixelPrepared || typeof window === "undefined") return;
+  metaPixelPrepared = true;
+
+  ensureMetaPixelQueueFunction();
+  getOrCreateScriptTag("meta-pixel-sdk", META_PIXEL_SCRIPT_SRC);
+
+  if (!metaPixelInitialized && window.fbq) {
+    window.fbq("init", META_PIXEL_ID);
+    metaPixelInitialized = true;
+  }
 }
 
 export function prepareAmplitudeTag() {
@@ -84,5 +148,50 @@ export function initializeWebAnalytics() {
 
   initializeGoogleAnalytics();
   prepareAmplitudeTag();
+  prepareMetaPixelTag();
 }
 
+export function trackEvent(eventName: string, properties: EventProperties = {}) {
+  if (typeof window === "undefined") return;
+  const eventProperties = normalizeProperties(properties);
+
+  if (window.gtag) {
+    window.gtag("event", eventName, eventProperties);
+  }
+
+  if (window.amplitude?.track) {
+    window.amplitude.track(eventName, eventProperties);
+  }
+}
+
+export function trackPageView(pagePath: string) {
+  trackEvent("page_view", { page_path: pagePath });
+
+  if (window.fbq && metaPixelInitialized) {
+    window.fbq("track", "PageView");
+  }
+}
+
+export function trackStartJourney(journeyName: string) {
+  trackEvent("Start_journey", { journey_name: journeyName });
+}
+
+export function trackCompleteJourney(journeyName: string) {
+  trackEvent("Complete_journey", { journey_name: journeyName });
+}
+
+export function trackUploadPhoto() {
+  trackEvent("Upload_photo");
+}
+
+export function trackMoodCheckin(emotion: string) {
+  trackEvent("Mood_checkin", { emotion });
+}
+
+export function trackNewEntry() {
+  trackEvent("New_entry");
+
+  if (window.fbq && metaPixelInitialized) {
+    window.fbq("track", "CompleteRegistration");
+  }
+}

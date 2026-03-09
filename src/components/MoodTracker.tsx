@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { trackMoodCheckin } from "@/lib/analytics/web";
 
 const moods = [
   { symbol: "〰", label: "Calm", color: "bg-sage-light" },
@@ -33,6 +34,7 @@ export default function MoodTracker() {
 
   const handleSelect = (i: number) => {
     setSelected(i);
+    trackMoodCheckin(moods[i].label.toLowerCase());
     setFading(true);
     setTimeout(() => setHidden(true), 500);
   };

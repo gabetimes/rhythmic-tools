@@ -4,6 +4,7 @@ import { Camera, ImagePlus, ArrowLeft } from "lucide-react";
 import { getCurrentPrompt } from "@/data/prompts";
 import { getTodayMood } from "@/components/MoodTracker";
 import { logCheckin, logSession } from "@/lib/session-store";
+import { trackUploadPhoto } from "@/lib/analytics/web";
 
 interface CapturedSpace {
   id: string;
@@ -36,6 +37,8 @@ export default function Capture() {
   const [saved, setSaved] = useState(false);
 
   const handleFile = (file: File) => {
+    trackUploadPhoto();
+
     const reader = new FileReader();
     reader.onload = (e) => {
       // Resize to save localStorage space

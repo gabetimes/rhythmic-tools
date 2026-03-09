@@ -6,9 +6,17 @@ interface TimerProps {
   isActive: boolean;
   noTimer?: boolean;
   noTimerLabel?: string;
+  onStart?: () => void;
 }
 
-export default function Timer({ durationMinutes, onComplete, isActive, noTimer, noTimerLabel }: TimerProps) {
+export default function Timer({
+  durationMinutes,
+  onComplete,
+  isActive,
+  noTimer,
+  noTimerLabel,
+  onStart,
+}: TimerProps) {
   const totalSeconds = durationMinutes * 60;
   const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
   const [running, setRunning] = useState(false);
@@ -79,6 +87,13 @@ export default function Timer({ durationMinutes, onComplete, isActive, noTimer, 
   const radius = 72;
   const circumference = 2 * Math.PI * radius;
   const dashOffset = circumference * (1 - progress);
+  const handleToggle = () => {
+    const isFirstStart = !running && secondsLeft === totalSeconds;
+    if (isFirstStart) {
+      onStart?.();
+    }
+    setRunning(!running);
+  };
 
   if (noTimer) {
     return (
@@ -144,7 +159,7 @@ export default function Timer({ durationMinutes, onComplete, isActive, noTimer, 
       </div>
 
       <button
-        onClick={() => setRunning(!running)}
+        onClick={handleToggle}
         className="px-8 py-3 rounded-full bg-primary text-primary-foreground font-medium text-sm tracking-wide hover:opacity-90 transition-opacity"
       >
         {running ? "Pause" : secondsLeft < totalSeconds ? "Resume" : "Begin"}
