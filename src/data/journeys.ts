@@ -35,7 +35,7 @@ export const journeys: Journey[] = [
       },
       {
         prompt: "What is one intention you want to carry into next week? What is one promise you want to make to yourself?",
-        durationMinutes: 6,
+        durationMinutes: 5,
         instruction: "Close with clarity.",
       },
     ],
