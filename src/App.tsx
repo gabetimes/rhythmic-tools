@@ -4,7 +4,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import InkLayout from "@/components/InkLayout";
+import SiteLayout from "@/components/SiteLayout";
 import ComingSoon from "./pages/ComingSoon";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
 import Index from "./pages/Index";
 import Exercises from "./pages/Exercises";
 import JourneyPage from "./pages/JourneyPage";
@@ -22,8 +25,33 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Coming Soon homepage */}
-          <Route path="/" element={<ComingSoon />} />
+          {/* Homepage */}
+          <Route
+            path="/"
+            element={
+              <SiteLayout>
+                <ComingSoon />
+              </SiteLayout>
+            }
+          />
+
+          {/* Legal pages */}
+          <Route
+            path="/terms"
+            element={
+              <SiteLayout>
+                <Terms />
+              </SiteLayout>
+            }
+          />
+          <Route
+            path="/privacy"
+            element={
+              <SiteLayout>
+                <Privacy />
+              </SiteLayout>
+            }
+          />
 
           {/* Ink tool routes */}
           <Route
