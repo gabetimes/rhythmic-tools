@@ -4,6 +4,8 @@ interface TimerProps {
   durationMinutes: number;
   onComplete: () => void;
   isActive: boolean;
+  noTimer?: boolean;
+  noTimerLabel?: string;
 }
 
 export default function Timer({ durationMinutes, onComplete, isActive }: TimerProps) {
