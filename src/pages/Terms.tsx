@@ -27,8 +27,7 @@ export default function Terms() {
         &ldquo;Services&rdquo;).
       </p>
       <p className="mb-4">
-        We provide content to help people reduce stress and raise awareness about
-        burnout.
+        We provide tools to empower people to navigate the challenges of everyday life, as well as explore self-discovery and self-regulation.
       </p>
       <p className="mb-4">
         You can contact us by phone at +1 248 955 3152, email at{" "}
