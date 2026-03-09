@@ -101,15 +101,7 @@ export default function JourneyPage() {
         <Timer
           key={currentStep}
           durationMinutes={step.durationMinutes}
-          onComplete={handleTimerComplete}
-          isActive={true}
-        />
-      </div>
-
-      {/* Next button */}
-      <div className="flex justify-center pt-2 animate-fade-up-delay-2">
-        <button
-          onClick={() => {
+          onComplete={step.noTimer ? () => {
             if (isLast) {
               logCheckin();
               logSession(0, "journey");
@@ -117,12 +109,32 @@ export default function JourneyPage() {
             } else {
               setCurrentStep((s) => s + 1);
             }
-          }}
-          className="px-6 py-2.5 rounded-full bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 transition-colors"
-        >
-          {isLast ? "Finish Journey" : "Next Step →"}
-        </button>
+          } : handleTimerComplete}
+          isActive={true}
+          noTimer={step.noTimer}
+          noTimerLabel={step.noTimerLabel}
+        />
       </div>
+
+      {/* Next button — hidden when noTimer (button is inside timer bubble) */}
+      {!step.noTimer && (
+        <div className="flex justify-center pt-2 animate-fade-up-delay-2">
+          <button
+            onClick={() => {
+              if (isLast) {
+                logCheckin();
+                logSession(0, "journey");
+                setCompleted(true);
+              } else {
+                setCurrentStep((s) => s + 1);
+              }
+            }}
+            className="px-6 py-2.5 rounded-full bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 transition-colors"
+          >
+            {isLast ? "Finish Journey" : "Next Step →"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

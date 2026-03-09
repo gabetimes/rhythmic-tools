@@ -2,6 +2,8 @@ export interface JourneyStep {
   prompt: string;
   durationMinutes: number;
   instruction?: string;
+  noTimer?: boolean;
+  noTimerLabel?: string;
 }
 
 export interface Journey {
@@ -46,9 +48,9 @@ export const journeys: Journey[] = [
     totalMinutes: 27,
     steps: [
       {
-        prompt: "Write down all anxious thoughts swirling in your mind right now. Just dump, without trying to solve anything.",
+        prompt: "Write down all anxious thoughts swirling in your mind right now.",
         durationMinutes: 5,
-        instruction: "Stream of consciousness. No pauses.",
+        instruction: "Just dump, without trying to solve anything right now.",
       },
       {
         prompt: "Pick the loudest worry. Describe it as if it were a weather pattern. What kind of storm is it?",
@@ -61,8 +63,8 @@ export const journeys: Journey[] = [
         instruction: "Write it out fully. Go through the worst case scenario.",
       },
       {
-        prompt: "What could you still do? Who could help? What could happen instead?",
-        durationMinutes: 5,
+        prompt: "What could you still do? Who could help? What is more likely to happen?",
+        durationMinutes: 10,
         instruction: "Challenge the narrative.",
       },
       {
@@ -77,22 +79,19 @@ export const journeys: Journey[] = [
     title: "Creative Unblocking",
     description: "Shake loose the ideas stuck behind your inner critic.",
     icon: "sparkles",
-    totalMinutes: 18,
+    totalMinutes: 15,
     steps: [
       {
-        prompt: "Write the most absurd, terrible idea you can think of. Make it ridiculous. Make it fun.",
-        durationMinutes: 5,
-        instruction: "Permission to be awful.",
+        prompt: "Write down everything that's bothering you, blocking you, or distracting you.",
+        durationMinutes: 10,
+        instruction: "Brain dump to clear mental capacity.",
       },
       {
-        prompt: "What creative work has inspired you recently? Describe how it made you feel, not what it was about.",
-        durationMinutes: 7,
-        instruction: "Feel, don't analyze.",
-      },
-      {
-        prompt: "If you had no audience and no consequences, what would you create today? Describe it in vivid detail.",
-        durationMinutes: 6,
-        instruction: "Dream without limits.",
+        prompt: "Come up with 5 terrible ideas, even if they feel forced. Make it ridiculous. Make it fun.",
+        durationMinutes: 0,
+        instruction: "Don't stop until you come up with 5, even if they don't come easily.",
+        noTimer: true,
+        noTimerLabel: "Got 5",
       },
     ],
   },
