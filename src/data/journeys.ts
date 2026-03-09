@@ -48,9 +48,9 @@ export const journeys: Journey[] = [
     totalMinutes: 27,
     steps: [
       {
-        prompt: "Write down all anxious thoughts swirling in your mind right now. Just dump, without trying to solve anything.",
+        prompt: "Write down all anxious thoughts swirling in your mind right now.",
         durationMinutes: 5,
-        instruction: "Stream of consciousness. No pauses.",
+        instruction: "Just dump, without trying to solve anything right now.",
       },
       {
         prompt: "Pick the loudest worry. Describe it as if it were a weather pattern. What kind of storm is it?",
@@ -63,8 +63,8 @@ export const journeys: Journey[] = [
         instruction: "Write it out fully. Go through the worst case scenario.",
       },
       {
-        prompt: "What could you still do? Who could help? What could happen instead?",
-        durationMinutes: 5,
+        prompt: "What could you still do? Who could help? What is more likely to happen?",
+        durationMinutes: 10,
         instruction: "Challenge the narrative.",
       },
       {
