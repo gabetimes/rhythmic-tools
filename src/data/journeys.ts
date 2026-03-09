@@ -54,7 +54,7 @@ export const journeys: Journey[] = [
       },
       {
         prompt: "Pick the loudest worry. Describe it as if it were a weather pattern. What kind of storm is it?",
-        durationMinutes: 6,
+        durationMinutes: 5,
         instruction: "Use metaphor to create distance.",
       },
       {
