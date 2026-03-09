@@ -3,6 +3,7 @@ import { Home, Compass, Camera, BarChart3, Volume2, VolumeX, Moon, Sun } from "l
 import { useAmbientSound } from "@/hooks/use-ambient-sound";
 import { useTheme } from "next-themes";
 import SoundPlayer from "./SoundPlayer";
+import SiteFooter from "./SiteFooter";
 import { useState } from "react";
 
 const navItems = [
@@ -56,6 +57,11 @@ export default function InkLayout({ children }: { children: React.ReactNode }) {
       <main className="flex-1 container max-w-lg mx-auto px-4 py-6 pb-24">
         {children}
       </main>
+
+      {/* Site footer (legal links) */}
+      <div className="pb-16">
+        <SiteFooter />
+      </div>
 
       {/* Bottom nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 bg-background/90 backdrop-blur-md border-t border-border">
