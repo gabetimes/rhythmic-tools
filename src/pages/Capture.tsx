@@ -70,6 +70,7 @@ export default function Capture() {
       ...(mood ? { mood } : {}),
     });
     logCheckin();
+    logSession(0, "capture");
     setSaved(true);
     setTimeout(() => navigate("/spaces"), 1500);
   };
