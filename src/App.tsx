@@ -17,6 +17,7 @@ import Capture from "./pages/Capture";
 import Spaces from "./pages/Spaces";
 import Stats from "./pages/Stats";
 import NotFound from "./pages/NotFound";
+import Shift from "./pages/Shift";
 
 const queryClient = new QueryClient();
 
@@ -116,6 +117,9 @@ const App = () => (
               </InkLayout>
             }
           />
+          {/* Shift tool */}
+          <Route path="/shift" element={<Shift />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
