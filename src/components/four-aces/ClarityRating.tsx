@@ -6,6 +6,7 @@ interface ClarityRatingProps {
   clarity: number;
   setClarity: (value: number) => void;
   onNext: () => void;
+  onTryAnother: () => void;
 }
 
 const CLARITY_MESSAGES: Record<number, string> = {
@@ -16,7 +17,7 @@ const CLARITY_MESSAGES: Record<number, string> = {
   5: "You know what to do.",
 };
 
-export default function ClarityRating({ clarity, setClarity, onNext }: ClarityRatingProps) {
+export default function ClarityRating({ clarity, setClarity, onNext, onTryAnother }: ClarityRatingProps) {
   return (
     <div className="pt-20">
       <Wrap>
@@ -38,8 +39,16 @@ export default function ClarityRating({ clarity, setClarity, onNext }: ClarityRa
               {CLARITY_MESSAGES[clarity]}
             </p>
           )}
-          <div className="mt-9">
+          <div className="mt-9 flex flex-col items-center gap-3">
             <Btn onClick={onNext} disabled={clarity === 0}>Continue</Btn>
+            {clarity > 0 && clarity <= 3 && (
+              <button
+                onClick={onTryAnother}
+                className="bg-none border-none text-4a-text-sec text-sm cursor-pointer font-4a-sans underline decoration-4a-border underline-offset-[3px]"
+              >
+                Try a different method
+              </button>
+            )}
           </div>
         </div>
       </Wrap>

@@ -131,26 +131,10 @@ const App = () => (
 
           {/* 4 Aces tool */}
           <Route
-            path="/4aces"
+            path="/4aces/*"
             element={
               <FourAcesLayout>
                 <FourAces />
-              </FourAcesLayout>
-            }
-          />
-          <Route
-            path="/4aces/history"
-            element={
-              <FourAcesLayout>
-                <FourAces initialScreen="history" />
-              </FourAcesLayout>
-            }
-          />
-          <Route
-            path="/4aces/methods"
-            element={
-              <FourAcesLayout>
-                <FourAces initialScreen="browse" />
               </FourAcesLayout>
             }
           />

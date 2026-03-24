@@ -131,6 +131,13 @@
   font-family: 'Outfit', sans-serif;
   color: hsl(var(--4a-text));
   background: hsl(var(--4a-bg));
+  color-scheme: light;
+
+  /* Force light-mode values so shared components (footer, etc.) render correctly */
+  --background: 40 33% 97%;
+  --foreground: 28 22% 14%;
+  --border: 35 18% 84%;
+  --muted-foreground: 28 12% 48%;
 }
 
 .four-aces h1,

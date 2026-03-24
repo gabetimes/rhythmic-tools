@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { STARTER_OPTIONS, type IntakeState } from "@/data/four-aces-constants";
+import { DECISION_TYPES, STARTER_OPTIONS, type IntakeState } from "@/data/four-aces-constants";
 import Btn from "./shared/Btn";
 import PageHeader from "./shared/PageHeader";
 import Wrap from "./shared/Wrap";
@@ -46,7 +46,11 @@ export default function OptionsEntry({ intake, options, setOptions, onNext, onBa
       <Wrap>
         <PageHeader title="Your options" onBack={onBack} />
         <h3 className="font-4a-serif text-2xl font-semibold text-center mb-2 leading-snug">
-          {intake.hasOptions ? "What are your options?" : "Here are some starting points"}
+          {intake.hasOptions
+            ? intake.decisionType && intake.decisionType !== "other"
+              ? `What are your options for your ${DECISION_TYPES.find((d) => d.id === intake.decisionType)?.label.toLowerCase()} decision?`
+              : "What are your options?"
+            : "Here are some starting points"}
         </h3>
         <p className="text-center text-4a-text-sec text-sm mb-7">
           {intake.hasOptions ? "Add the choices you're weighing." : "Edit, remove, or add your own."}

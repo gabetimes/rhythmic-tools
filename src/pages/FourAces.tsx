@@ -47,15 +47,17 @@ type Screen =
   | "saved-confirm"
   | "history";
 
-interface FourAcesProps {
-  initialScreen?: Screen;
+function screenFromPath(pathname: string): Screen {
+  if (pathname === "/4aces/history") return "history";
+  if (pathname === "/4aces/methods") return "browse";
+  return "landing";
 }
 
-export default function FourAces({ initialScreen }: FourAcesProps) {
+export default function FourAces() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [screen, setScreen] = useState<Screen>(initialScreen ?? "landing");
+  const [screen, setScreen] = useState<Screen>(() => screenFromPath(location.pathname));
   const [intake, setIntake] = useState<IntakeState>({
     hasOptions: null,
     slider: 50,
@@ -73,15 +75,20 @@ export default function FourAces({ initialScreen }: FourAcesProps) {
     setSaved(loadDecisions());
   }, []);
 
-  // Sync screen with route
+  // Sync screen with route (only for direct navigation via header links)
   useEffect(() => {
-    if (location.pathname === "/4aces/history" && screen !== "history") {
-      setScreen("history");
+    const state = location.state as { reset?: boolean } | null;
+    if (state?.reset) {
+      setScreen("landing");
+      // Clear the state so browser back doesn't re-trigger
+      navigate(location.pathname, { replace: true, state: {} });
+      return;
     }
-    if (location.pathname === "/4aces/methods" && screen !== "browse") {
-      setScreen("browse");
+    const target = screenFromPath(location.pathname);
+    if (target !== "landing" && screen !== target) {
+      setScreen(target);
     }
-  }, [location.pathname]);
+  }, [location.pathname, location.state]);
 
   const goTo = useCallback(
     (s: Screen) => {
@@ -205,7 +212,7 @@ export default function FourAces({ initialScreen }: FourAcesProps) {
         />
       );
     case "recommendations":
-      return <Recommendations recs={recs} onPick={startMethod} onBrowse={() => goTo("browse")} />;
+      return <Recommendations recs={recs} intake={intake} onPick={startMethod} onBrowse={() => goTo("browse")} />;
     case "browse":
       return <BrowseAll onPick={startMethod} onBack={() => goTo("recommendations")} />;
     case "method":
@@ -220,7 +227,7 @@ export default function FourAces({ initialScreen }: FourAcesProps) {
         />
       );
     case "clarity":
-      return <ClarityRating clarity={clarity} setClarity={setClarity} onNext={submitClarity} />;
+      return <ClarityRating clarity={clarity} setClarity={setClarity} onNext={submitClarity} onTryAnother={() => goTo("browse")} />;
     case "save":
       return (
         <SaveDecision
