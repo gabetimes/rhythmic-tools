@@ -13,14 +13,30 @@ export function getRecommendations(
     values: 0,
   };
 
-  const fast = 1 - slider / 100;
-  const conf = slider / 100;
+  const isFast = slider < 33;
+  const isMiddle = slider >= 33 && slider <= 66;
+  const isHigh = slider > 66;
 
-  scores.flip += fast * 5;
-  scores.proscons += fast * 3 + conf * 2;
-  scores.reversible += 2.5;
-  scores.criteria += conf * 5;
-  scores.values += conf * 4;
+  // Values-led and criteria map: only for high confidence
+  if (isHigh) {
+    scores.criteria += 5;
+    scores.values += 4;
+  }
+
+  // Flip a coin and reversible or not: fast or middle
+  if (isFast || isMiddle) {
+    scores.flip += 5;
+    scores.reversible += 4;
+  }
+
+  // Pros and cons: #1 for middle decisions
+  if (isMiddle) {
+    scores.proscons += 6;
+  } else if (isFast) {
+    scores.proscons += 2;
+  } else {
+    scores.proscons += 3;
+  }
 
   const personal = ["relationships", "big-life-change"].includes(decisionType ?? "");
   const practical = ["work-career", "finances", "daily-life"].includes(decisionType ?? "");
