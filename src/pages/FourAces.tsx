@@ -47,15 +47,17 @@ type Screen =
   | "saved-confirm"
   | "history";
 
-interface FourAcesProps {
-  initialScreen?: Screen;
+function screenFromPath(pathname: string): Screen {
+  if (pathname === "/4aces/history") return "history";
+  if (pathname === "/4aces/methods") return "browse";
+  return "landing";
 }
 
-export default function FourAces({ initialScreen }: FourAcesProps) {
+export default function FourAces() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [screen, setScreen] = useState<Screen>(initialScreen ?? "landing");
+  const [screen, setScreen] = useState<Screen>(() => screenFromPath(location.pathname));
   const [intake, setIntake] = useState<IntakeState>({
     hasOptions: null,
     slider: 50,
@@ -73,13 +75,11 @@ export default function FourAces({ initialScreen }: FourAcesProps) {
     setSaved(loadDecisions());
   }, []);
 
-  // Sync screen with route
+  // Sync screen with route (only for direct navigation via header links)
   useEffect(() => {
-    if (location.pathname === "/4aces/history" && screen !== "history") {
-      setScreen("history");
-    }
-    if (location.pathname === "/4aces/methods" && screen !== "browse") {
-      setScreen("browse");
+    const target = screenFromPath(location.pathname);
+    if (target !== "landing" && screen !== target) {
+      setScreen(target);
     }
   }, [location.pathname]);
 

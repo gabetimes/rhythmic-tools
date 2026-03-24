@@ -8,17 +8,19 @@ interface FourAcesCardProps {
 }
 
 export default function FourAcesCard({ children, onClick, className, style }: FourAcesCardProps) {
+  const Tag = onClick ? "button" : "div";
   return (
-    <div
+    <Tag
       onClick={onClick}
       className={cn(
-        "bg-4a-card rounded-[14px] p-6 border border-4a-border transition-all",
+        "bg-4a-card rounded-[14px] p-6 border border-4a-border transition-all text-left w-full",
         onClick && "cursor-pointer",
         className,
       )}
       style={style}
+      type={onClick ? "button" : undefined}
     >
       {children}
-    </div>
+    </Tag>
   );
 }
