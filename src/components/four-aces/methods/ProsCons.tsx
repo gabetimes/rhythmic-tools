@@ -91,7 +91,7 @@ export default function ProsCons({ options, result, setResult, onComplete, onBac
   return (
     <div className="pt-[60px]">
       <Wrap>
-        <PageHeader title="Pros & Cons" onBack={onBack} />
+        <PageHeader title="Pros & Cons" onBack={phase === "edit" ? onBack : () => setPhase("edit")} />
         <ProgressDots current={phase === "edit" ? 0 : 1} total={2} />
 
         {phase === "edit" && (

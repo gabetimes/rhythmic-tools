@@ -41,7 +41,12 @@ export default function CriteriaMap({ options, result, setResult, onComplete, on
   return (
     <div className="pt-[60px]">
       <Wrap>
-        <PageHeader title="Criteria Map" onBack={onBack} />
+        <PageHeader title="Criteria Map" onBack={
+          phase === "criteria" ? onBack :
+          phase === "weight" ? () => setPhase("criteria") :
+          phase === "rate" ? () => setPhase("weight") :
+          () => setPhase("rate")
+        } />
         <ProgressDots current={phase === "criteria" ? 0 : phase === "weight" ? 1 : phase === "rate" ? 2 : 3} total={4} />
 
         {phase === "criteria" && (

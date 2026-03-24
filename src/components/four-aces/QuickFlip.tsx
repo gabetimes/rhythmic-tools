@@ -1,26 +1,31 @@
 import { useState } from "react";
 import type { MethodResult } from "@/data/four-aces-constants";
-import Btn from "../shared/Btn";
-import FourAcesCard from "../shared/FourAcesCard";
-import PageHeader from "../shared/PageHeader";
-import ProgressDots from "../shared/ProgressDots";
-import Wrap from "../shared/Wrap";
+import Btn from "./shared/Btn";
+import FourAcesCard from "./shared/FourAcesCard";
+import PageHeader from "./shared/PageHeader";
+import Wrap from "./shared/Wrap";
 
-interface FlipACoinProps {
-  options: string[];
+interface QuickFlipProps {
   result: MethodResult;
   setResult: React.Dispatch<React.SetStateAction<MethodResult>>;
   onComplete: () => void;
   onBack: () => void;
+  setOptions: (opts: string[]) => void;
 }
 
-export default function FlipACoin({ options, result, setResult, onComplete, onBack }: FlipACoinProps) {
-  const [phase, setPhase] = useState<"ready" | "flipping" | "result" | "reflect">("ready");
+export default function QuickFlip({ result, setResult, onComplete, onBack, setOptions }: QuickFlipProps) {
+  const [optionA, setOptionA] = useState("");
+  const [optionB, setOptionB] = useState("");
+  const [phase, setPhase] = useState<"input" | "flipping" | "result" | "reflect">("input");
   const [flipResult, setFlipResult] = useState("");
   const [hoped, setHoped] = useState("");
-  const top2 = options.slice(0, 2);
+
+  const canFlip = optionA.trim() && optionB.trim();
+  const top2 = [optionA.trim(), optionB.trim()];
 
   const doFlip = () => {
+    if (!canFlip) return;
+    setOptions(top2);
     setPhase("flipping");
     setTimeout(() => {
       const pick = top2[Math.floor(Math.random() * top2.length)];
@@ -29,24 +34,43 @@ export default function FlipACoin({ options, result, setResult, onComplete, onBa
     }, 1200);
   };
 
+  const handleBack = () => {
+    if (phase === "input") return onBack();
+    if (phase === "reflect") return setPhase("result");
+    setPhase("input");
+  };
+
   return (
     <div className="pt-[60px]">
       <Wrap>
-        <PageHeader title="Flip a Coin" onBack={phase === "ready" ? onBack : phase === "reflect" ? () => setPhase("result") : () => setPhase("ready")} />
-        <ProgressDots current={phase === "ready" ? 0 : phase === "result" ? 1 : 2} total={3} />
+        <PageHeader title="Quick Decision" onBack={handleBack} />
 
-        {phase === "ready" && (
+        {phase === "input" && (
           <div className="text-center">
-            <div className="text-[64px] mb-5">🪙</div>
-            <p className="text-4a-text-sec text-sm mb-2">Your two options:</p>
-            <div className="flex gap-3 justify-center mb-8">
-              {top2.map((o, i) => (
-                <div key={i} className="py-2.5 px-[18px] rounded-[10px] bg-4a-accent-light font-semibold text-sm text-4a-text">
-                  {o}
-                </div>
-              ))}
+            <div className="text-[56px] mb-4">🪙</div>
+            <h4 className="font-4a-serif text-xl mb-1">Two options. 30 seconds.</h4>
+            <p className="text-4a-text-sec text-sm mb-7">
+              Type your two options and flip.
+            </p>
+            <div className="flex flex-col gap-3 mb-8 text-left">
+              <input
+                value={optionA}
+                onChange={(e) => setOptionA(e.target.value)}
+                placeholder="Option A"
+                className="w-full py-3 px-3.5 rounded-[10px] border-[1.5px] border-4a-border text-sm font-4a-sans bg-4a-card text-4a-text box-border"
+                autoFocus
+              />
+              <input
+                value={optionB}
+                onChange={(e) => setOptionB(e.target.value)}
+                placeholder="Option B"
+                onKeyDown={(e) => e.key === "Enter" && canFlip && doFlip()}
+                className="w-full py-3 px-3.5 rounded-[10px] border-[1.5px] border-4a-border text-sm font-4a-sans bg-4a-card text-4a-text box-border"
+              />
             </div>
-            <Btn onClick={doFlip}>Flip the coin</Btn>
+            <Btn onClick={doFlip} disabled={!canFlip}>
+              Flip the coin
+            </Btn>
           </div>
         )}
 
