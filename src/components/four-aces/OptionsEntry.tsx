@@ -13,19 +13,35 @@ interface OptionsEntryProps {
 }
 
 export default function OptionsEntry({ intake, options, setOptions, onNext, onBack }: OptionsEntryProps) {
-  const initialized = useRef(false);
+  const seededType = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!initialized.current) {
-      initialized.current = true;
-      if (intake.hasOptions) {
-        if (options.length === 0) setOptions(["", ""]);
-      } else {
-        const starters = STARTER_OPTIONS[intake.decisionType ?? "other"] ?? STARTER_OPTIONS.other;
-        if (options.length === 0) setOptions([...starters]);
+    if (intake.hasOptions) {
+      if (options.length === 0) setOptions(["", ""]);
+    } else {
+      const typeKey = intake.decisionType ?? "other";
+      const starters = STARTER_OPTIONS[typeKey] ?? STARTER_OPTIONS.other;
+
+      if (options.length === 0) {
+        // First visit — seed with starters
+        seededType.current = typeKey;
+        setOptions([...starters]);
+      } else if (seededType.current && seededType.current !== typeKey) {
+        // User went back and picked a different category — re-seed
+        // only if options still match the previously seeded starters
+        const prevStarters = STARTER_OPTIONS[seededType.current] ?? STARTER_OPTIONS.other;
+        const unchanged = options.length === prevStarters.length &&
+          options.every((o, i) => o === prevStarters[i]);
+        if (unchanged) {
+          setOptions([...starters]);
+        }
+        seededType.current = typeKey;
+      } else if (!seededType.current) {
+        // Remount after first visit — just record what type we're on
+        seededType.current = typeKey;
       }
     }
-  }, []);
+  }, [intake.decisionType]);
 
   const updateOpt = (i: number, val: string) =>
     setOptions((p) => p.map((o, j) => (j === i ? val : o)));
