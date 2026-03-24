@@ -33,12 +33,6 @@ export default function FourAcesHeader() {
           >
             Decisions
           </Link>
-          <Link
-            to="/"
-            className="text-[13px] font-medium font-4a-sans text-4a-text-sec no-underline"
-          >
-            Home
-          </Link>
         </nav>
       </div>
     </header>
