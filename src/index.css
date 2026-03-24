@@ -131,6 +131,7 @@
   font-family: 'Outfit', sans-serif;
   color: hsl(var(--4a-text));
   background: hsl(var(--4a-bg));
+  color-scheme: light;
 
   /* Force light-mode values so shared components (footer, etc.) render correctly */
   --background: 40 33% 97%;

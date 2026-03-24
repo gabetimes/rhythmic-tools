@@ -24,7 +24,7 @@ export default function SaveDecision({ title, setTitle, result, method, onSave }
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g., Should I take the new job?"
-          className="w-full p-3.5 rounded-[10px] border-[1.5px] border-4a-border text-[15px] font-4a-sans mb-5 box-border"
+          className="w-full p-3.5 rounded-[10px] border-[1.5px] border-4a-border text-[15px] font-4a-sans mb-5 box-border bg-4a-card text-4a-text"
         />
         <FourAcesCard
           className="mb-6"
