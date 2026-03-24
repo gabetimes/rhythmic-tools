@@ -32,6 +32,7 @@ import ClarityRating from "@/components/four-aces/ClarityRating";
 import SaveDecision from "@/components/four-aces/SaveDecision";
 import SavedConfirm from "@/components/four-aces/SavedConfirm";
 import History from "@/components/four-aces/History";
+import QuickFlip from "@/components/four-aces/QuickFlip";
 
 type Screen =
   | "landing"
@@ -45,7 +46,8 @@ type Screen =
   | "clarity"
   | "save"
   | "saved-confirm"
-  | "history";
+  | "history"
+  | "quick-flip";
 
 function screenFromPath(pathname: string): Screen {
   if (pathname === "/4aces/history") return "history";
@@ -104,6 +106,16 @@ export default function FourAces() {
     },
     [navigate, location.pathname],
   );
+
+  const startQuickFlip = () => {
+    setOptions([]);
+    setMethodResult({ chosen: "", takeaway: "" });
+    setClarity(0);
+    setDecisionTitle("");
+    setCurrentMethod("flip");
+    setIntake({ hasOptions: true, slider: 0, decisionType: null });
+    goTo("quick-flip");
+  };
 
   const startIntake = () => {
     track4AIntakeStarted();
@@ -164,7 +176,7 @@ export default function FourAces() {
 
   switch (screen) {
     case "landing":
-      return <Landing onStart={startIntake} onHistory={() => goTo("history")} savedCount={saved.length} />;
+      return <Landing onStart={startIntake} onQuickDecision={startQuickFlip} onHistory={() => goTo("history")} savedCount={saved.length} />;
     case "intake-1":
       return (
         <IntakeStep1
@@ -240,6 +252,16 @@ export default function FourAces() {
       );
     case "saved-confirm":
       return <SavedConfirm onNew={startIntake} onHistory={() => goTo("history")} />;
+    case "quick-flip":
+      return (
+        <QuickFlip
+          result={methodResult}
+          setResult={setMethodResult}
+          onComplete={completeMethod}
+          onBack={() => goTo("landing")}
+          setOptions={setOptions}
+        />
+      );
     case "history":
       return <History decisions={saved} onBack={() => goTo("landing")} onNew={startIntake} />;
     default:

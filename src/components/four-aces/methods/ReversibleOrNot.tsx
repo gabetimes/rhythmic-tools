@@ -25,7 +25,7 @@ export default function ReversibleOrNot({ options, result, setResult, onComplete
   return (
     <div className="pt-[60px]">
       <Wrap>
-        <PageHeader title="Reversible or Not" onBack={onBack} />
+        <PageHeader title="Reversible or Not" onBack={phase === "assess" ? onBack : () => setPhase("assess")} />
         <ProgressDots current={phase === "assess" ? 0 : 1} total={2} />
 
         {phase === "assess" && (

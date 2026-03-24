@@ -2,11 +2,12 @@ import Btn from "./shared/Btn";
 
 interface LandingProps {
   onStart: () => void;
+  onQuickDecision: () => void;
   onHistory: () => void;
   savedCount: number;
 }
 
-export default function Landing({ onStart, onHistory, savedCount }: LandingProps) {
+export default function Landing({ onStart, onQuickDecision, onHistory, savedCount }: LandingProps) {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center p-8 text-center">
       <div className="mb-4">
@@ -18,9 +19,14 @@ export default function Landing({ onStart, onHistory, savedCount }: LandingProps
       <p className="text-[17px] text-4a-text-sec max-w-[320px] leading-relaxed m-0 mb-10">
         Five ways to cut through the noise and make the call.
       </p>
-      <Btn onClick={onStart} className="text-[17px] px-10 py-4 rounded-[14px]">
-        Make a Decision
-      </Btn>
+      <div className="flex flex-col gap-3 items-center">
+        <Btn onClick={onStart} className="text-[17px] px-10 py-4 rounded-[14px]">
+          Make a Decision
+        </Btn>
+        <Btn variant="secondary" onClick={onQuickDecision} className="text-[15px] px-8 py-3 rounded-[12px]">
+          Quick Decision
+        </Btn>
+      </div>
       {savedCount > 0 && (
         <button
           onClick={onHistory}

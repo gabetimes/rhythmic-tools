@@ -36,7 +36,11 @@ export default function ValuesLed({ options, result, setResult, onComplete, onBa
   return (
     <div className="pt-[60px]">
       <Wrap>
-        <PageHeader title="Values-Led" onBack={onBack} />
+        <PageHeader title="Values-Led" onBack={
+          phase === "pick" ? onBack :
+          phase === "align" ? () => setPhase("pick") :
+          () => setPhase("align")
+        } />
         <ProgressDots current={phase === "pick" ? 0 : phase === "align" ? 1 : 2} total={3} />
 
         {phase === "pick" && (
