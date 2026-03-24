@@ -3,6 +3,7 @@ import { PRESET_VALUES, type MethodResult } from "@/data/four-aces-constants";
 import Btn from "../shared/Btn";
 import FourAcesCard from "../shared/FourAcesCard";
 import PageHeader from "../shared/PageHeader";
+import ProgressDots from "../shared/ProgressDots";
 import Wrap from "../shared/Wrap";
 
 interface ValuesLedProps {
@@ -36,6 +37,7 @@ export default function ValuesLed({ options, result, setResult, onComplete, onBa
     <div className="pt-[60px]">
       <Wrap>
         <PageHeader title="Values-Led" onBack={onBack} />
+        <ProgressDots current={phase === "pick" ? 0 : phase === "align" ? 1 : 2} total={3} />
 
         {phase === "pick" && (
           <>

@@ -3,6 +3,7 @@ import type { MethodResult } from "@/data/four-aces-constants";
 import Btn from "../shared/Btn";
 import FourAcesCard from "../shared/FourAcesCard";
 import PageHeader from "../shared/PageHeader";
+import ProgressDots from "../shared/ProgressDots";
 import Wrap from "../shared/Wrap";
 
 interface ProsConsProps {
@@ -22,6 +23,7 @@ export default function ProsCons({ options, result, setResult, onComplete, onBac
   const [activeIdx, setActiveIdx] = useState(0);
   const [data, setData] = useState<ProsConsData[]>(() => options.map(() => ({ pros: [""], cons: [""] })));
   const [phase, setPhase] = useState<"edit" | "reflect">("edit");
+  const [nudge, setNudge] = useState<string | null>(null);
 
   const updateEntry = (side: "pros" | "cons", entryIdx: number, value: string) => {
     const d = [...data];
@@ -29,6 +31,7 @@ export default function ProsCons({ options, result, setResult, onComplete, onBac
     entries[entryIdx] = value;
     d[activeIdx] = { ...d[activeIdx], [side]: entries };
     setData(d);
+    if (nudge) setNudge(null);
   };
 
   const addEntry = (side: "pros" | "cons") => {
@@ -51,6 +54,7 @@ export default function ProsCons({ options, result, setResult, onComplete, onBac
     <div className="pt-[60px]">
       <Wrap>
         <PageHeader title="Pros & Cons" onBack={onBack} />
+        <ProgressDots current={phase === "edit" ? 0 : 1} total={2} />
 
         {phase === "edit" && (
           <>
@@ -130,8 +134,36 @@ export default function ProsCons({ options, result, setResult, onComplete, onBac
                 </div>
               </div>
             </div>
+            {nudge && (
+              <div
+                className="mt-4 py-2.5 px-3.5 rounded-[10px] text-[13px] font-4a-sans font-medium"
+                style={{
+                  background: "hsl(var(--4a-accent-faint))",
+                  border: "1.5px solid hsl(var(--4a-accent))",
+                  color: "hsl(var(--4a-text))",
+                }}
+              >
+                {nudge}
+              </div>
+            )}
             <div className="text-center mt-7">
-              <Btn onClick={() => setPhase("reflect")}>Review & Reflect</Btn>
+              <Btn
+                onClick={() => {
+                  const empty = data.findIndex(
+                    (d, i) =>
+                      d.pros.every((e) => !e.trim()) && d.cons.every((e) => !e.trim()) && i < options.length,
+                  );
+                  if (empty !== -1) {
+                    setNudge(`Did you forget something for '${options[empty]}'?`);
+                    setActiveIdx(empty);
+                    return;
+                  }
+                  setNudge(null);
+                  setPhase("reflect");
+                }}
+              >
+                Review & Reflect
+              </Btn>
             </div>
           </>
         )}

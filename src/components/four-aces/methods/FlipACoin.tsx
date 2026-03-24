@@ -3,6 +3,7 @@ import type { MethodResult } from "@/data/four-aces-constants";
 import Btn from "../shared/Btn";
 import FourAcesCard from "../shared/FourAcesCard";
 import PageHeader from "../shared/PageHeader";
+import ProgressDots from "../shared/ProgressDots";
 import Wrap from "../shared/Wrap";
 
 interface FlipACoinProps {
@@ -32,6 +33,7 @@ export default function FlipACoin({ options, result, setResult, onComplete, onBa
     <div className="pt-[60px]">
       <Wrap>
         <PageHeader title="Flip a Coin" onBack={onBack} />
+        <ProgressDots current={phase === "ready" ? 0 : phase === "result" ? 1 : 2} total={3} />
 
         {phase === "ready" && (
           <div className="text-center">

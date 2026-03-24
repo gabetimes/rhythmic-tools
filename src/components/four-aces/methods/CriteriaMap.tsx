@@ -3,6 +3,7 @@ import type { MethodResult } from "@/data/four-aces-constants";
 import Btn from "../shared/Btn";
 import FourAcesCard from "../shared/FourAcesCard";
 import PageHeader from "../shared/PageHeader";
+import ProgressDots from "../shared/ProgressDots";
 import Wrap from "../shared/Wrap";
 
 interface CriteriaMapProps {
@@ -41,6 +42,7 @@ export default function CriteriaMap({ options, result, setResult, onComplete, on
     <div className="pt-[60px]">
       <Wrap>
         <PageHeader title="Criteria Map" onBack={onBack} />
+        <ProgressDots current={phase === "criteria" ? 0 : phase === "weight" ? 1 : phase === "rate" ? 2 : 3} total={4} />
 
         {phase === "criteria" && (
           <>

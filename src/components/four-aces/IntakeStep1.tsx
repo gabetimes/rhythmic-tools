@@ -1,5 +1,4 @@
 import type { IntakeState } from "@/data/four-aces-constants";
-import Btn from "./shared/Btn";
 import FourAcesCard from "./shared/FourAcesCard";
 import PageHeader from "./shared/PageHeader";
 import ProgressDots from "./shared/ProgressDots";
@@ -18,6 +17,12 @@ const CHOICES = [
 ] as const;
 
 export default function IntakeStep1({ intake, setIntake, onNext, onBack }: IntakeStep1Props) {
+  const select = (val: boolean) => {
+    setIntake((p) => ({ ...p, hasOptions: val }));
+    // Auto-advance after a brief visual confirmation
+    setTimeout(onNext, 300);
+  };
+
   return (
     <div className="pt-[60px]">
       <Wrap>
@@ -30,7 +35,7 @@ export default function IntakeStep1({ intake, setIntake, onNext, onBack }: Intak
           {CHOICES.map(({ val, label, sub }) => (
             <FourAcesCard
               key={String(val)}
-              onClick={() => setIntake((p) => ({ ...p, hasOptions: val }))}
+              onClick={() => select(val)}
               className="py-[18px] px-5"
               style={{
                 border: `2px solid ${intake.hasOptions === val ? "hsl(var(--4a-accent))" : "hsl(var(--4a-border))"}`,
@@ -41,9 +46,6 @@ export default function IntakeStep1({ intake, setIntake, onNext, onBack }: Intak
               <div className="text-[13px] text-4a-text-sec">{sub}</div>
             </FourAcesCard>
           ))}
-        </div>
-        <div className="text-center mt-8">
-          <Btn onClick={onNext} disabled={intake.hasOptions === null}>Continue</Btn>
         </div>
       </Wrap>
     </div>

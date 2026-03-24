@@ -3,6 +3,7 @@ import type { MethodResult } from "@/data/four-aces-constants";
 import Btn from "../shared/Btn";
 import FourAcesCard from "../shared/FourAcesCard";
 import PageHeader from "../shared/PageHeader";
+import ProgressDots from "../shared/ProgressDots";
 import Wrap from "../shared/Wrap";
 
 interface ReversibleOrNotProps {
@@ -25,6 +26,7 @@ export default function ReversibleOrNot({ options, result, setResult, onComplete
     <div className="pt-[60px]">
       <Wrap>
         <PageHeader title="Reversible or Not" onBack={onBack} />
+        <ProgressDots current={phase === "assess" ? 0 : 1} total={2} />
 
         {phase === "assess" && (
           <>
