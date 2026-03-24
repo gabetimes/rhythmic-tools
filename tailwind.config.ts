@@ -16,6 +16,8 @@ export default {
       fontFamily: {
         serif: ["Lora", "Georgia", "serif"],
         sans: ["Source Sans 3", "system-ui", "sans-serif"],
+        "4a-serif": ["Fraunces", "Georgia", "serif"],
+        "4a-sans": ["Outfit", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -72,6 +74,21 @@ export default {
         },
         warm: {
           glow: "hsl(var(--warm-glow))",
+        },
+        "4a": {
+          bg: "hsl(var(--4a-bg))",
+          card: "hsl(var(--4a-card))",
+          text: "hsl(var(--4a-text))",
+          "text-sec": "hsl(var(--4a-text-sec))",
+          accent: "hsl(var(--4a-accent))",
+          "accent-hover": "hsl(var(--4a-accent-hover))",
+          "accent-light": "hsl(var(--4a-accent-light))",
+          "accent-faint": "hsl(var(--4a-accent-faint))",
+          border: "hsl(var(--4a-border))",
+          success: "hsl(var(--4a-success))",
+          danger: "hsl(var(--4a-danger))",
+          "surface-dark": "hsl(var(--4a-surface-dark))",
+          "surface-mid": "hsl(var(--4a-surface-mid))",
         },
       },
       borderRadius: {
