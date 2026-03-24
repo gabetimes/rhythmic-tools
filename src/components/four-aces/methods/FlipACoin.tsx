@@ -98,12 +98,12 @@ export default function FlipACoin({ options, result, setResult, onComplete, onBa
                 ? "Sounds like you already knew."
                 : "That feeling of wanting the other option? That's your answer."}
             </p>
-            <p className="text-[13px] text-4a-text-sec font-medium mb-1.5 font-4a-sans">Your takeaway</p>
+            <p className="text-[13px] text-4a-text-sec font-medium mb-1.5 font-4a-sans">What did you realize about this decision?</p>
             <textarea
               value={result.takeaway}
               onChange={(e) => setResult((p) => ({ ...p, takeaway: e.target.value }))}
               placeholder="What did you learn from this?"
-              className="w-full min-h-[80px] p-3.5 rounded-[10px] border-[1.5px] border-4a-border text-sm font-4a-sans resize-y box-border"
+              className="w-full min-h-[80px] p-3.5 rounded-[10px] border-[1.5px] border-4a-border text-sm font-4a-sans resize-y box-border bg-4a-card text-4a-text"
             />
             <div className="mt-6">
               <Btn onClick={onComplete}>Continue</Btn>

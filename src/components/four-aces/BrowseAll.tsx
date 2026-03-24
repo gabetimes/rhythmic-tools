@@ -31,7 +31,7 @@ export default function BrowseAll({ onPick, onBack }: BrowseAllProps) {
               className="py-[18px] px-5"
             >
               <div className="flex items-center gap-3.5">
-                <span className="text-[26px]">{m.icon}</span>
+                {m.icon && <span className="text-[26px]">{m.icon}</span>}
                 <div className="flex-1">
                   <div className="font-bold text-[15px]">{m.name}</div>
                   <div className="text-[13px] text-4a-text-sec">{m.desc}</div>

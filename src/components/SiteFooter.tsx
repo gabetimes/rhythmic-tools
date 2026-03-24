@@ -6,7 +6,7 @@ const DO_NOT_SELL_HREF =
 export default function SiteFooter() {
   return (
     <footer className="border-t border-border bg-background">
-      <div className="container max-w-3xl mx-auto px-4 py-8">
+      <div className="container max-w-3xl mx-auto px-4 py-4 sm:py-8">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground font-sans">
           <p>&copy; {new Date().getFullYear()} Rhythmic, Inc.</p>
           <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">

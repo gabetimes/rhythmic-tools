@@ -241,6 +241,6 @@ export function track4ASeeMoreMethodsClicked() {
   trackEvent("4a_see_more_methods_clicked");
 }
 
-export function track4AClarityRatingSubmitted(clarityRating: number) {
-  trackEvent("4a_clarity_rating_submitted", { clarity_rating: clarityRating });
+export function track4AClarityRatingSubmitted(clarityRating: number, methodName?: string) {
+  trackEvent("4a_clarity_rating_submitted", { clarity_rating: clarityRating, method_name: methodName });
 }

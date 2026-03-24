@@ -146,6 +146,14 @@ const App = () => (
               </FourAcesLayout>
             }
           />
+          <Route
+            path="/4aces/methods"
+            element={
+              <FourAcesLayout>
+                <FourAces initialScreen="browse" />
+              </FourAcesLayout>
+            }
+          />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
