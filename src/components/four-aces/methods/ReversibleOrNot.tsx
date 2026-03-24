@@ -53,7 +53,7 @@ export default function ReversibleOrNot({ options, result, setResult, onComplete
               value={worstCase}
               onChange={(e) => setWorstCase(e.target.value)}
               placeholder="Describe the downside..."
-              className="w-full min-h-[80px] p-3.5 rounded-[10px] border-[1.5px] border-4a-border text-sm font-4a-sans resize-y box-border mb-6"
+              className="w-full min-h-[80px] p-3.5 rounded-[10px] border-[1.5px] border-4a-border text-sm font-4a-sans resize-y box-border mb-6 bg-4a-card text-4a-text"
             />
             <div className="text-center">
               <Btn onClick={() => setPhase("guidance")}>See guidance</Btn>
@@ -106,12 +106,12 @@ export default function ReversibleOrNot({ options, result, setResult, onComplete
                 </FourAcesCard>
               ))}
             </div>
-            <p className="text-[13px] text-4a-text-sec font-medium mb-1.5 font-4a-sans">Your takeaway</p>
+            <p className="text-[13px] text-4a-text-sec font-medium mb-1.5 font-4a-sans">What did you realize about this decision?</p>
             <textarea
               value={result.takeaway}
               onChange={(e) => setResult((p) => ({ ...p, takeaway: e.target.value }))}
               placeholder="What did this help you see?"
-              className="w-full min-h-[80px] p-3.5 rounded-[10px] border-[1.5px] border-4a-border text-sm font-4a-sans resize-y box-border"
+              className="w-full min-h-[80px] p-3.5 rounded-[10px] border-[1.5px] border-4a-border text-sm font-4a-sans resize-y box-border bg-4a-card text-4a-text"
             />
             <div className="text-center mt-6">
               <Btn onClick={onComplete}>Continue</Btn>

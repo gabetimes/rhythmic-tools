@@ -8,11 +8,11 @@ export interface Method {
 }
 
 export const METHODS: Record<MethodId, Method> = {
-  flip: { id: "flip", name: "Flip a Coin", desc: "Let chance reveal your gut feeling", icon: "🪙" },
-  proscons: { id: "proscons", name: "Pros & Cons", desc: "Weigh the good against the bad", icon: "⚖️" },
-  reversible: { id: "reversible", name: "Reversible or Not", desc: "How permanent is this really?", icon: "🔄" },
-  criteria: { id: "criteria", name: "Criteria Map", desc: "Score options against what matters", icon: "📊" },
-  values: { id: "values", name: "Values-Led", desc: "Align your choice with your values", icon: "🧭" },
+  flip: { id: "flip", name: "Flip a Coin", desc: "Let chance reveal your gut feeling", icon: "" },
+  proscons: { id: "proscons", name: "Pros & Cons", desc: "Weigh the good against the bad", icon: "" },
+  reversible: { id: "reversible", name: "Reversible or Not", desc: "How permanent is this really?", icon: "" },
+  criteria: { id: "criteria", name: "Criteria Map", desc: "Score options against what matters", icon: "" },
+  values: { id: "values", name: "Values-Led", desc: "Align your choice with your values", icon: "" },
 };
 
 export interface DecisionType {

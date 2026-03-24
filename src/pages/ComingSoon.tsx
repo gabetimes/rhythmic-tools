@@ -23,6 +23,20 @@ export default function ComingSoon() {
             </CardFooter>
           </Card>
         </Link>
+
+        <Link to="/4aces" className="block mt-4">
+          <Card className="text-left hover:shadow-md transition-shadow">
+            <CardHeader>
+              <CardTitle className="font-serif text-xl">4 Aces</CardTitle>
+              <CardDescription className="text-base leading-relaxed">
+                A decision-making tool with five methods to help you choose with clarity. Flip a coin, weigh pros and cons, or align your choice with your values.
+              </CardDescription>
+            </CardHeader>
+            <CardFooter>
+              <Button variant="default">Try it Now</Button>
+            </CardFooter>
+          </Card>
+        </Link>
       </div>
     </div>
   );

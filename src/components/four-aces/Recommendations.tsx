@@ -14,7 +14,7 @@ export default function Recommendations({ recs, onPick, onBrowse }: Recommendati
     <div className="pt-[60px]">
       <Wrap>
         <div className="text-center mb-2">
-          <span className="text-4xl">✨</span>
+          <span className="text-4xl">♣♠</span>
         </div>
         <h3 className="font-4a-serif text-[26px] font-semibold text-center mb-2">
           Try {recs.length === 1 ? "this" : "one of these"}
@@ -36,7 +36,7 @@ export default function Recommendations({ recs, onPick, onBrowse }: Recommendati
                 }}
               >
                 <div className="flex items-center gap-3.5">
-                  <span className="text-[28px]">{m.icon}</span>
+                  {m.icon && <span className="text-[28px]">{m.icon}</span>}
                   <div className="flex-1">
                     <div className="font-bold text-base mb-0.5">{m.name}</div>
                     <div className="text-[13px] text-4a-text-sec">{m.desc}</div>

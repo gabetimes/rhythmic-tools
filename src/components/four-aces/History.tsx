@@ -27,7 +27,9 @@ export default function History({ decisions, onBack, onNew }: HistoryProps) {
               <FourAcesCard key={d.id} className="py-4 px-[18px]">
                 <div className="flex justify-between items-start mb-1.5">
                   <div className="font-bold text-[15px] flex-1">{d.title}</div>
-                  <div className="flex gap-0.5 shrink-0">
+                  <div className="flex flex-col items-end gap-0.5 shrink-0">
+                    <span className="text-[10px] text-4a-text-sec font-medium font-4a-sans">Clarity rating</span>
+                    <div className="flex gap-0.5">
                     {[1, 2, 3, 4, 5].map((n) => (
                       <span
                         key={n}
@@ -41,6 +43,7 @@ export default function History({ decisions, onBack, onNew }: HistoryProps) {
                         ●
                       </span>
                     ))}
+                    </div>
                   </div>
                 </div>
                 <div className="text-[13px] text-4a-text-sec">

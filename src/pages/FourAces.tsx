@@ -78,6 +78,9 @@ export default function FourAces({ initialScreen }: FourAcesProps) {
     if (location.pathname === "/4aces/history" && screen !== "history") {
       setScreen("history");
     }
+    if (location.pathname === "/4aces/methods" && screen !== "browse") {
+      setScreen("browse");
+    }
   }, [location.pathname]);
 
   const goTo = useCallback(
@@ -86,6 +89,8 @@ export default function FourAces({ initialScreen }: FourAcesProps) {
       // Keep URL in sync for history route
       if (s === "history") {
         navigate("/4aces/history", { replace: true });
+      } else if (s === "browse") {
+        navigate("/4aces/methods", { replace: true });
       } else if (location.pathname !== "/4aces") {
         navigate("/4aces", { replace: true });
       }
@@ -123,7 +128,7 @@ export default function FourAces({ initialScreen }: FourAcesProps) {
   };
 
   const submitClarity = () => {
-    track4AClarityRatingSubmitted(clarity);
+    track4AClarityRatingSubmitted(clarity, METHODS[currentMethod].name);
     goTo("save");
   };
 

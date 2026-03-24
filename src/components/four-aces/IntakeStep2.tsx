@@ -26,10 +26,10 @@ export default function IntakeStep2({ intake, setIntake, onNext, onBack }: Intak
         <div className="px-2">
           <div className="flex justify-between mb-3 text-sm font-semibold">
             <span style={{ color: intake.slider < 40 ? "hsl(var(--4a-accent))" : "hsl(var(--4a-text-sec))" }}>
-              ⚡ Fast
+              Fast
             </span>
             <span style={{ color: intake.slider > 60 ? "hsl(var(--4a-accent))" : "hsl(var(--4a-text-sec))" }}>
-              🎯 Confident
+              Confident
             </span>
           </div>
           <input
