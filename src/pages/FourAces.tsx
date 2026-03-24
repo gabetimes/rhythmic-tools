@@ -205,7 +205,7 @@ export default function FourAces() {
         />
       );
     case "recommendations":
-      return <Recommendations recs={recs} onPick={startMethod} onBrowse={() => goTo("browse")} />;
+      return <Recommendations recs={recs} intake={intake} onPick={startMethod} onBrowse={() => goTo("browse")} />;
     case "browse":
       return <BrowseAll onPick={startMethod} onBack={() => goTo("recommendations")} />;
     case "method":
@@ -220,7 +220,7 @@ export default function FourAces() {
         />
       );
     case "clarity":
-      return <ClarityRating clarity={clarity} setClarity={setClarity} onNext={submitClarity} />;
+      return <ClarityRating clarity={clarity} setClarity={setClarity} onNext={submitClarity} onTryAnother={() => goTo("browse")} />;
     case "save":
       return (
         <SaveDecision

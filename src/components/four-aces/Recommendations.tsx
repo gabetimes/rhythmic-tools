@@ -1,15 +1,51 @@
-import { METHODS, type MethodId } from "@/data/four-aces-constants";
+import { METHODS, type MethodId, type IntakeState } from "@/data/four-aces-constants";
 import Btn from "./shared/Btn";
 import FourAcesCard from "./shared/FourAcesCard";
 import Wrap from "./shared/Wrap";
 
+const DECISION_TYPE_LABELS: Record<string, string> = {
+  "work-career": "a career decision",
+  "relationships": "a relationship decision",
+  "finances": "a financial decision",
+  "daily-life": "an everyday choice",
+  "big-life-change": "a big life decision",
+  "other": "this kind of decision",
+};
+
+function getExplanation(methodId: MethodId, intake: IntakeState): string {
+  const isFast = intake.slider < 33;
+  const isHigh = intake.slider > 66;
+  const typeLabel = DECISION_TYPE_LABELS[intake.decisionType ?? ""] ?? "this decision";
+
+  const explanations: Record<MethodId, string> = {
+    flip: isFast
+      ? `You said speed matters — a coin flip cuts through overthinking for ${typeLabel}.`
+      : `Sometimes a quick gut check is what you need for ${typeLabel}.`,
+    proscons: isFast
+      ? `A quick pros and cons list can bring fast clarity to ${typeLabel}.`
+      : `Laying out the trade-offs is a solid fit for ${typeLabel}.`,
+    reversible: isFast
+      ? `Checking how reversible this is can speed up ${typeLabel}.`
+      : `Understanding what's at stake helps with ${typeLabel}.`,
+    criteria: isHigh
+      ? `You want confidence, and scoring against criteria is thorough for ${typeLabel}.`
+      : `A structured scoring approach can sharpen your thinking on ${typeLabel}.`,
+    values: isHigh
+      ? `You want confidence — aligning with your values is powerful for ${typeLabel}.`
+      : `Checking what aligns with your values can clarify ${typeLabel}.`,
+  };
+
+  return explanations[methodId];
+}
+
 interface RecommendationsProps {
   recs: MethodId[];
+  intake: IntakeState;
   onPick: (methodId: MethodId) => void;
   onBrowse: () => void;
 }
 
-export default function Recommendations({ recs, onPick, onBrowse }: RecommendationsProps) {
+export default function Recommendations({ recs, intake, onPick, onBrowse }: RecommendationsProps) {
   return (
     <div className="pt-[60px]">
       <Wrap>
@@ -43,8 +79,11 @@ export default function Recommendations({ recs, onPick, onBrowse }: Recommendati
                   </div>
                   <span className="text-4a-accent text-xl">→</span>
                 </div>
+                <div className="mt-2 text-[12px] text-4a-text-sec italic leading-snug">
+                  {getExplanation(mId, intake)}
+                </div>
                 {i === 0 && (
-                  <div className="mt-2.5 text-[11px] font-semibold text-4a-accent uppercase tracking-widest">
+                  <div className="mt-2 text-[11px] font-semibold text-4a-accent uppercase tracking-widest">
                     Best match
                   </div>
                 )}
