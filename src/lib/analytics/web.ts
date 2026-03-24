@@ -164,34 +164,83 @@ export function trackEvent(eventName: string, properties: EventProperties = {}) 
   }
 }
 
-export function trackPageView(pagePath: string) {
-  trackEvent("page_view", { page_path: pagePath });
+export function trackPageView(pagePath: string, prefix?: string) {
+  const eventName = prefix ? `${prefix}_page_view` : "page_view";
+  trackEvent(eventName, { page_path: pagePath });
 
   if (window.fbq && metaPixelInitialized) {
     window.fbq("track", "PageView");
   }
 }
 
+// ── Ink analytics (ink_ prefix) ──────────────────────────────
+
 export function trackStartJourney(journeyName: string) {
-  trackEvent("Start_journey", { journey_name: journeyName });
+  trackEvent("ink_Start_journey", { journey_name: journeyName });
 }
 
 export function trackCompleteJourney(journeyName: string) {
-  trackEvent("Complete_journey", { journey_name: journeyName });
+  trackEvent("ink_Complete_journey", { journey_name: journeyName });
 }
 
 export function trackUploadPhoto() {
-  trackEvent("Upload_photo");
+  trackEvent("ink_Upload_photo");
 }
 
 export function trackMoodCheckin(emotion: string) {
-  trackEvent("Mood_checkin", { emotion });
+  trackEvent("ink_Mood_checkin", { emotion });
 }
 
 export function trackNewEntry() {
-  trackEvent("New_entry");
+  trackEvent("ink_New_entry");
 
   if (window.fbq && metaPixelInitialized) {
     window.fbq("track", "CompleteRegistration");
   }
+}
+
+// ── 4 Aces analytics (4a_ prefix) ───────────────────────────
+
+export function track4AIntakeStarted() {
+  trackEvent("4a_intake_started");
+}
+
+export function track4AIntakeStep(
+  stepNumber: number,
+  stepName: string,
+  stepQuestion: string,
+  userAnswer: string | number | boolean,
+) {
+  trackEvent("4a_intake_step", {
+    step_number: stepNumber,
+    step_name: stepName,
+    step_question: stepQuestion,
+    user_answer: String(userAnswer),
+  });
+}
+
+export function track4AIntakeCompleted(recommendedMethods: string[]) {
+  trackEvent("4a_intake_completed", {
+    recommended_methods: recommendedMethods.join(", "),
+  });
+}
+
+export function track4AMethodStarted(methodName: string) {
+  trackEvent("4a_method_started", { method_name: methodName });
+}
+
+export function track4AMethodCompleted(methodName: string) {
+  trackEvent("4a_method_completed", { method_name: methodName });
+}
+
+export function track4AOptionSaved(optionText: string) {
+  trackEvent("4a_option_saved", { option_text: optionText });
+}
+
+export function track4ASeeMoreMethodsClicked() {
+  trackEvent("4a_see_more_methods_clicked");
+}
+
+export function track4AClarityRatingSubmitted(clarityRating: number) {
+  trackEvent("4a_clarity_rating_submitted", { clarity_rating: clarityRating });
 }

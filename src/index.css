@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&family=Outfit:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -55,6 +55,21 @@
 
     --font-serif: 'Lora', Georgia, serif;
     --font-sans: 'Source Sans 3', system-ui, sans-serif;
+
+    /* 4 Aces tokens */
+    --4a-bg: 40 33% 97%;
+    --4a-card: 0 0% 100%;
+    --4a-text: 240 25% 15%;
+    --4a-text-sec: 240 5% 52%;
+    --4a-accent: 42 52% 54%;
+    --4a-accent-hover: 42 48% 48%;
+    --4a-accent-light: 42 60% 90%;
+    --4a-accent-faint: 42 60% 96%;
+    --4a-border: 40 10% 90%;
+    --4a-success: 152 32% 42%;
+    --4a-danger: 0 46% 55%;
+    --4a-surface-dark: 240 25% 15%;
+    --4a-surface-mid: 240 20% 20%;
   }
 
   .dark {
@@ -109,6 +124,22 @@
   .font-sans {
     font-family: var(--font-sans);
   }
+}
+
+/* 4 Aces — force light theme and brand fonts */
+.four-aces {
+  font-family: 'Outfit', sans-serif;
+  color: hsl(var(--4a-text));
+  background: hsl(var(--4a-bg));
+}
+
+.four-aces h1,
+.four-aces h2,
+.four-aces h3,
+.four-aces h4,
+.four-aces h5,
+.four-aces h6 {
+  font-family: 'Fraunces', serif;
 }
 
 /* Timer ring animation */

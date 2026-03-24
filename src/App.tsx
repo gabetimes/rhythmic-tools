@@ -18,15 +18,24 @@ import Spaces from "./pages/Spaces";
 import Stats from "./pages/Stats";
 import NotFound from "./pages/NotFound";
 import Shift from "./pages/Shift";
+import FourAcesLayout from "@/components/FourAcesLayout";
+import FourAces from "./pages/FourAces";
 
 const queryClient = new QueryClient();
+
+function getAnalyticsPrefix(pathname: string): string | undefined {
+  if (pathname.startsWith("/ink")) return "ink";
+  if (pathname.startsWith("/4aces")) return "4a";
+  return undefined;
+}
 
 function AnalyticsPageTracker() {
   const location = useLocation();
 
   useEffect(() => {
     const path = `${location.pathname}${location.search}${location.hash}`;
-    trackPageView(path);
+    const prefix = getAnalyticsPrefix(location.pathname);
+    trackPageView(path, prefix);
   }, [location.pathname, location.search, location.hash]);
 
   return null;
@@ -119,6 +128,24 @@ const App = () => (
           />
           {/* Shift tool */}
           <Route path="/shift" element={<Shift />} />
+
+          {/* 4 Aces tool */}
+          <Route
+            path="/4aces"
+            element={
+              <FourAcesLayout>
+                <FourAces />
+              </FourAcesLayout>
+            }
+          />
+          <Route
+            path="/4aces/history"
+            element={
+              <FourAcesLayout>
+                <FourAces initialScreen="history" />
+              </FourAcesLayout>
+            }
+          />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

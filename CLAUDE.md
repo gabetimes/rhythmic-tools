@@ -22,6 +22,7 @@ All tools share common branding and design foundations defined in `DESIGN.md`, i
 
 - **`SiteLayout`** — Wraps the homepage and legal pages (`/`, `/terms`, `/privacy`). Includes `SiteHeader` and `SiteFooter`.
 - **`InkLayout`** — Wraps all `/ink/*` routes with its own header, bottom tab nav, and `SiteFooter`.
+- **`FourAcesLayout`** — Wraps all `/4aces/*` routes with its own brand styling (Fraunces + Outfit fonts, gold accent palette) and `SiteFooter`. No dark mode.
 
 ### Sitewide Components
 
@@ -34,6 +35,9 @@ When adding a new tool with its own layout, always include `SiteFooter` so legal
 
 ### Ink (`/ink`)
 A minimalist digital companion for pen-and-paper journaling. Features daily writing prompts, guided journeys, mood tracking, writing space capture, and ambient sounds.
+
+### 4 Aces (`/4aces`)
+A decision-making tool offering five methods: Flip a Coin, Pros & Cons, Reversible or Not, Criteria Map, and Values-Led. Standalone brand with its own fonts (Fraunces + Outfit) and gold accent palette. Uses internal state-based navigation with React Router for `/4aces` and `/4aces/history`. Decisions saved to localStorage.
 
 ## Development
 
@@ -52,6 +56,14 @@ bun run dev
 - `src/components/SiteHeader.tsx` — Sitewide header with "View Our Tools" link
 - `src/components/SiteFooter.tsx` — Sitewide footer with legal links (used in both SiteLayout and InkLayout)
 - `src/components/InkLayout.tsx` — Layout wrapper for the Ink tool
+- `src/components/FourAcesLayout.tsx` — Layout wrapper for the 4 Aces tool
+- `src/components/four-aces/` — 4 Aces screen components
+- `src/components/four-aces/shared/` — 4 Aces shared UI primitives (Btn, Card, etc.)
+- `src/components/four-aces/methods/` — 4 Aces decision method components
+- `src/pages/FourAces.tsx` — 4 Aces main page (state machine + screen router)
+- `src/data/four-aces-constants.ts` — 4 Aces methods, decision types, preset values
+- `src/lib/four-aces-storage.ts` — 4 Aces localStorage helpers
+- `src/lib/four-aces-recommendations.ts` — 4 Aces recommendation scoring engine
 - `src/pages/` — Page components
 - `src/components/` — Reusable components
 - `src/components/ui/` — shadcn/ui primitives
