@@ -77,11 +77,18 @@ export default function FourAces() {
 
   // Sync screen with route (only for direct navigation via header links)
   useEffect(() => {
+    const state = location.state as { reset?: boolean } | null;
+    if (state?.reset) {
+      setScreen("landing");
+      // Clear the state so browser back doesn't re-trigger
+      navigate(location.pathname, { replace: true, state: {} });
+      return;
+    }
     const target = screenFromPath(location.pathname);
     if (target !== "landing" && screen !== target) {
       setScreen(target);
     }
-  }, [location.pathname]);
+  }, [location.pathname, location.state]);
 
   const goTo = useCallback(
     (s: Screen) => {
