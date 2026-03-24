@@ -114,7 +114,7 @@ export default function CriteriaMap({ options, result, setResult, onComplete, on
                 </div>
               ))}
             </div>
-            <div className="flex justify-between text-[11px] text-4a-text-sec mt-1">
+            <div className="flex justify-between text-[11px] text-4a-text-sec mt-1" style={{ width: "calc(5 * 2.5rem + 4 * 0.375rem)" }}>
               <span>Low importance</span>
               <span>High importance</span>
             </div>
