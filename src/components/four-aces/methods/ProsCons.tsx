@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import type { MethodResult } from "@/data/four-aces-constants";
 import Btn from "../shared/Btn";
 import FourAcesCard from "../shared/FourAcesCard";
@@ -24,6 +24,35 @@ export default function ProsCons({ options, result, setResult, onComplete, onBac
   const [data, setData] = useState<ProsConsData[]>(() => options.map(() => ({ pros: [""], cons: [""] })));
   const [phase, setPhase] = useState<"edit" | "reflect">("edit");
   const [nudge, setNudge] = useState<string | null>(null);
+  // Track dismissed auto-cons per option, keyed as "optionIdx:proText"
+  const [dismissed, setDismissed] = useState<Set<string>>(() => new Set());
+
+  // Compute auto-cons for a given option: non-empty pros from all OTHER options
+  const getAutoCons = (optIdx: number): string[] => {
+    const autoCons: string[] = [];
+    data.forEach((d, i) => {
+      if (i === optIdx) return;
+      d.pros.forEach((pro) => {
+        if (pro.trim() && !dismissed.has(`${optIdx}:${pro.trim()}`)) {
+          autoCons.push(pro.trim());
+        }
+      });
+    });
+    return autoCons;
+  };
+
+  const activeAutoCons = useMemo(
+    () => getAutoCons(activeIdx),
+    [data, activeIdx, dismissed],
+  );
+
+  const dismissAutoCon = (proText: string) => {
+    setDismissed((prev) => {
+      const next = new Set(prev);
+      next.add(`${activeIdx}:${proText}`);
+      return next;
+    });
+  };
 
   const updateEntry = (side: "pros" | "cons", entryIdx: number, value: string) => {
     const d = [...data];
@@ -45,6 +74,15 @@ export default function ProsCons({ options, result, setResult, onComplete, onBac
     const entries = d[activeIdx][side].filter((_, i) => i !== entryIdx);
     d[activeIdx] = { ...d[activeIdx], [side]: entries.length > 0 ? entries : [""] };
     setData(d);
+  };
+
+  // Merge manual cons + auto-cons for display in reflect phase
+  const getAllCons = (optIdx: number): { text: string; auto: boolean }[] => {
+    const manual = (data[optIdx]?.cons ?? [])
+      .filter((e) => e.trim())
+      .map((text) => ({ text, auto: false }));
+    const auto = getAutoCons(optIdx).map((text) => ({ text: `Not ${text}`, auto: true }));
+    return [...manual, ...auto];
   };
 
   const formatEntries = (entries: string[]) =>
@@ -131,6 +169,22 @@ export default function ProsCons({ options, result, setResult, onComplete, onBac
                   >
                     + Add con
                   </button>
+                  {/* Auto-generated "Not X" cons from other options' pros */}
+                  {activeAutoCons.map((proText) => (
+                    <div key={proText} className="flex gap-1 items-center">
+                      <div
+                        className="flex-1 min-w-0 py-2.5 px-3 rounded-[10px] border-[1.5px] border-dashed border-4a-border text-sm font-4a-sans text-4a-text-sec box-border"
+                      >
+                        <em>Not</em> {proText}
+                      </div>
+                      <button
+                        onClick={() => dismissAutoCon(proText)}
+                        className="bg-none border-none text-4a-text-sec cursor-pointer text-base leading-none shrink-0"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -151,7 +205,7 @@ export default function ProsCons({ options, result, setResult, onComplete, onBac
                 onClick={() => {
                   const empty = data.findIndex(
                     (d, i) =>
-                      d.pros.every((e) => !e.trim()) && d.cons.every((e) => !e.trim()) && i < options.length,
+                      d.pros.every((e) => !e.trim()) && d.cons.every((e) => !e.trim()) && getAutoCons(i).length === 0 && i < options.length,
                   );
                   if (empty !== -1) {
                     setNudge(`Did you forget something for '${options[empty]}'?`);
@@ -171,21 +225,31 @@ export default function ProsCons({ options, result, setResult, onComplete, onBac
         {phase === "reflect" && (
           <>
             <div className="flex flex-col gap-3 mb-6">
-              {options.map((o, i) => (
-                <FourAcesCard key={i} className="py-4 px-[18px]">
-                  <div className="font-bold text-[15px] mb-2">{o}</div>
-                  <div className="grid grid-cols-2 gap-2 text-[13px]">
-                    <div>
-                      <span className="text-4a-success font-semibold">Pros: </span>
-                      {formatEntries(data[i]?.pros ?? []) || "—"}
+              {options.map((o, i) => {
+                const allCons = getAllCons(i);
+                return (
+                  <FourAcesCard key={i} className="py-4 px-[18px]">
+                    <div className="font-bold text-[15px] mb-2">{o}</div>
+                    <div className="grid grid-cols-2 gap-2 text-[13px]">
+                      <div>
+                        <span className="text-4a-success font-semibold">Pros: </span>
+                        {formatEntries(data[i]?.pros ?? []) || "—"}
+                      </div>
+                      <div>
+                        <span className="text-4a-danger font-semibold">Cons: </span>
+                        {allCons.length > 0
+                          ? allCons.map((c, ci) => (
+                              <span key={ci}>
+                                {ci > 0 && ", "}
+                                {c.auto ? <><em>Not</em> {c.text.replace(/^Not /, "")}</> : c.text}
+                              </span>
+                            ))
+                          : "—"}
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-4a-danger font-semibold">Cons: </span>
-                      {formatEntries(data[i]?.cons ?? []) || "—"}
-                    </div>
-                  </div>
-                </FourAcesCard>
-              ))}
+                  </FourAcesCard>
+                );
+              })}
             </div>
             <p className="text-[13px] text-4a-text-sec font-medium mb-1.5 font-4a-sans">Which option feels strongest?</p>
             <div className="flex flex-col gap-2 mb-5">
