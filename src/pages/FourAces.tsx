@@ -68,6 +68,7 @@ export default function FourAces() {
   const [options, setOptions] = useState<string[]>([]);
   const [recs, setRecs] = useState<MethodId[]>([]);
   const [currentMethod, setCurrentMethod] = useState<MethodId>("flip");
+  const [pendingMethod, setPendingMethod] = useState<MethodId | null>(null);
   const [methodResult, setMethodResult] = useState<MethodResult>({ chosen: "", takeaway: "" });
   const [clarity, setClarity] = useState(0);
   const [decisionTitle, setDecisionTitle] = useState("");
@@ -124,6 +125,18 @@ export default function FourAces() {
     setMethodResult({ chosen: "", takeaway: "" });
     setClarity(0);
     setDecisionTitle("");
+    setPendingMethod(null);
+    goTo("intake-1");
+  };
+
+  const startMethodWithIntake = (methodId: MethodId) => {
+    track4AIntakeStarted();
+    setIntake({ hasOptions: null, slider: 50, decisionType: null });
+    setOptions([]);
+    setMethodResult({ chosen: "", takeaway: "" });
+    setClarity(0);
+    setDecisionTitle("");
+    setPendingMethod(methodId);
     goTo("intake-1");
   };
 
@@ -131,7 +144,15 @@ export default function FourAces() {
     const r = getRecommendations(intake.slider, intake.decisionType, intake.hasOptions);
     setRecs(r);
     track4AIntakeCompleted(r.map((m) => METHODS[m].name));
-    goTo("recommendations");
+    if (pendingMethod) {
+      setCurrentMethod(pendingMethod);
+      setMethodResult({ chosen: "", takeaway: "" });
+      track4AMethodStarted(METHODS[pendingMethod].name);
+      setPendingMethod(null);
+      goTo("method");
+    } else {
+      goTo("recommendations");
+    }
   };
 
   const startMethod = (methodId: MethodId) => {
@@ -226,7 +247,7 @@ export default function FourAces() {
     case "recommendations":
       return <Recommendations recs={recs} intake={intake} onPick={startMethod} onBrowse={() => goTo("browse")} />;
     case "browse":
-      return <BrowseAll onPick={startMethod} onBack={() => goTo("recommendations")} />;
+      return <BrowseAll onPick={startMethodWithIntake} onBack={() => goTo("recommendations")} />;
     case "method":
       return (
         <MethodRouter
