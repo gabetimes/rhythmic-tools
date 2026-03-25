@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { MethodResult } from "@/data/four-aces-constants";
+import { track4AMethodResultRevealed } from "@/lib/analytics/web";
 import Btn from "../shared/Btn";
 import FourAcesCard from "../shared/FourAcesCard";
 import PageHeader from "../shared/PageHeader";
@@ -167,7 +168,7 @@ export default function CriteriaMap({ options, result, setResult, onComplete, on
               ))}
             </div>
             <div className="text-center mt-6">
-              <Btn onClick={() => setPhase("results")}>See results</Btn>
+              <Btn onClick={() => { track4AMethodResultRevealed("Criteria Map"); setPhase("results"); }}>See results</Btn>
             </div>
           </>
         )}

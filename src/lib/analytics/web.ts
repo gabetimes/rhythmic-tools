@@ -203,6 +203,10 @@ export function trackNewEntry() {
 
 export function track4AIntakeStarted() {
   trackEvent("4a_intake_started");
+
+  if (window.fbq && metaPixelInitialized) {
+    window.fbq("track", "CompleteRegistration");
+  }
 }
 
 export function track4AIntakeStep(
@@ -227,6 +231,14 @@ export function track4AIntakeCompleted(recommendedMethods: string[]) {
 
 export function track4AMethodStarted(methodName: string) {
   trackEvent("4a_method_started", { method_name: methodName });
+}
+
+export function track4AMethodResultRevealed(methodName: string) {
+  trackEvent("4a_method_result_revealed", { method_name: methodName });
+
+  if (window.fbq && metaPixelInitialized) {
+    window.fbq("track", "AddToCart");
+  }
 }
 
 export function track4AMethodCompleted(methodName: string) {

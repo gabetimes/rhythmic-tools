@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { MethodResult } from "@/data/four-aces-constants";
+import { track4AMethodResultRevealed } from "@/lib/analytics/web";
 import Btn from "../shared/Btn";
 import FourAcesCard from "../shared/FourAcesCard";
 import PageHeader from "../shared/PageHeader";
@@ -21,6 +22,7 @@ export default function FlipACoin({ options, result, setResult, onComplete, onBa
   const top2 = options.slice(0, 2);
 
   const doFlip = () => {
+    track4AMethodResultRevealed("Flip a Coin");
     setPhase("flipping");
     setTimeout(() => {
       const pick = top2[Math.floor(Math.random() * top2.length)];

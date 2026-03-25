@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { MethodResult } from "@/data/four-aces-constants";
+import { track4AMethodResultRevealed } from "@/lib/analytics/web";
 import Btn from "./shared/Btn";
 import FourAcesCard from "./shared/FourAcesCard";
 import PageHeader from "./shared/PageHeader";
@@ -25,6 +26,7 @@ export default function QuickFlip({ result, setResult, onComplete, onBack, setOp
 
   const doFlip = () => {
     if (!canFlip) return;
+    track4AMethodResultRevealed("Flip a Coin");
     setOptions(top2);
     setPhase("flipping");
     setTimeout(() => {
