@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PRESET_VALUES, type MethodResult } from "@/data/four-aces-constants";
+import { track4AMethodResultRevealed } from "@/lib/analytics/web";
 import Btn from "../shared/Btn";
 import FourAcesCard from "../shared/FourAcesCard";
 import PageHeader from "../shared/PageHeader";
@@ -163,7 +164,7 @@ export default function ValuesLed({ options, result, setResult, onComplete, onBa
               </FourAcesCard>
             ))}
             <div className="text-center mt-4">
-              <Btn onClick={() => setPhase("reflect")}>Reflect</Btn>
+              <Btn onClick={() => { track4AMethodResultRevealed("Values-Led"); setPhase("reflect"); }}>Reflect</Btn>
             </div>
           </>
         )}
