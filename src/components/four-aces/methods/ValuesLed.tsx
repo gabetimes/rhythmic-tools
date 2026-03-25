@@ -249,9 +249,9 @@ export default function ValuesLed({ options, result, setResult, onComplete, onWa
                 <Btn onClick={onComplete}>Continue</Btn>
                 <button
                   onClick={onWantMoreClarity}
-                  className="bg-none border-none text-4a-text-sec text-sm cursor-pointer font-4a-sans underline decoration-4a-border underline-offset-[3px]"
+                  className="py-2.5 px-5 rounded-[10px] bg-4a-text text-white text-sm font-semibold cursor-pointer font-4a-sans border-none"
                 >
-                  Want more clarity?
+                  &#9824;&#xFE0E; Want more clarity? &#9830;&#xFE0E;
                 </button>
               </div>
             </>
