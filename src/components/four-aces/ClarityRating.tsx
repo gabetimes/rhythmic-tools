@@ -1,3 +1,5 @@
+import { useState } from "react";
+import type { MethodResult } from "@/data/four-aces-constants";
 import Btn from "./shared/Btn";
 import StarRating from "./shared/StarRating";
 import Wrap from "./shared/Wrap";
@@ -5,8 +7,11 @@ import Wrap from "./shared/Wrap";
 interface ClarityRatingProps {
   clarity: number;
   setClarity: (value: number) => void;
+  result: MethodResult;
+  setResult: React.Dispatch<React.SetStateAction<MethodResult>>;
   onNext: () => void;
   onTryAnother: () => void;
+  onWantMoreClarity: () => void;
 }
 
 const CLARITY_MESSAGES: Record<number, string> = {
@@ -17,7 +22,9 @@ const CLARITY_MESSAGES: Record<number, string> = {
   5: "You know what to do.",
 };
 
-export default function ClarityRating({ clarity, setClarity, onNext, onTryAnother }: ClarityRatingProps) {
+export default function ClarityRating({ clarity, setClarity, result, setResult, onNext, onTryAnother, onWantMoreClarity }: ClarityRatingProps) {
+  const [showTakeaway, setShowTakeaway] = useState(false);
+
   return (
     <div className="pt-20">
       <Wrap>
@@ -39,15 +46,40 @@ export default function ClarityRating({ clarity, setClarity, onNext, onTryAnothe
               {CLARITY_MESSAGES[clarity]}
             </p>
           )}
+          {!showTakeaway ? (
+            <button
+              onClick={() => setShowTakeaway(true)}
+              className="mt-4 bg-none border-none text-4a-text-sec text-sm cursor-pointer font-4a-sans underline decoration-4a-border underline-offset-[3px]"
+            >
+              Write a short decision takeaway note.
+            </button>
+          ) : (
+            <div className="mt-4 text-left">
+              <textarea
+                value={result.takeaway}
+                onChange={(e) => setResult((p) => ({ ...p, takeaway: e.target.value }))}
+                placeholder="What did you learn from this decision?"
+                className="w-full min-h-[80px] p-3.5 rounded-[10px] border-[1.5px] border-4a-border text-sm font-4a-sans resize-y box-border bg-4a-card text-4a-text"
+              />
+            </div>
+          )}
           <div className="mt-9 flex flex-col items-center gap-3">
             <Btn onClick={onNext} disabled={clarity === 0}>Continue</Btn>
             {clarity > 0 && clarity <= 3 && (
-              <button
-                onClick={onTryAnother}
-                className="bg-none border-none text-4a-text-sec text-sm cursor-pointer font-4a-sans underline decoration-4a-border underline-offset-[3px]"
-              >
-                Try a different method
-              </button>
+              <>
+                <button
+                  onClick={onTryAnother}
+                  className="bg-none border-none text-4a-text-sec text-sm cursor-pointer font-4a-sans underline decoration-4a-border underline-offset-[3px]"
+                >
+                  Try a different method
+                </button>
+                <button
+                  onClick={onWantMoreClarity}
+                  className="bg-none border-none text-4a-text-sec text-sm cursor-pointer font-4a-sans underline decoration-4a-border underline-offset-[3px]"
+                >
+                  Want more clarity?
+                </button>
+              </>
             )}
           </div>
         </div>

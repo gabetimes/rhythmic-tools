@@ -12,10 +12,11 @@ interface ValuesLedProps {
   result: MethodResult;
   setResult: React.Dispatch<React.SetStateAction<MethodResult>>;
   onComplete: () => void;
+  onWantMoreClarity: () => void;
   onBack: () => void;
 }
 
-export default function ValuesLed({ options, result, setResult, onComplete, onBack }: ValuesLedProps) {
+export default function ValuesLed({ options, result, setResult, onComplete, onWantMoreClarity, onBack }: ValuesLedProps) {
   const [phase, setPhase] = useState<"pick" | "align" | "reflect">("pick");
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
   const [customVal, setCustomVal] = useState("");
@@ -164,7 +165,23 @@ export default function ValuesLed({ options, result, setResult, onComplete, onBa
               </FourAcesCard>
             ))}
             <div className="text-center mt-4">
-              <Btn onClick={() => { track4AMethodResultRevealed("Values-Led"); setPhase("reflect"); }}>Reflect</Btn>
+              <Btn onClick={() => {
+                track4AMethodResultRevealed("Values-Led");
+                // Compute and store method scores normalized to 0-100
+                const maxScore = selectedValues.length * 2;
+                const ms: Record<number, number> = {};
+                options.forEach((_, oi) => {
+                  let total = 0;
+                  let counted = 0;
+                  selectedValues.forEach((_, vi) => {
+                    const val = alignments[`${oi}-${vi}`];
+                    if (val !== undefined && val !== -1) { total += val; counted++; }
+                  });
+                  ms[oi] = maxScore > 0 && counted > 0 ? Math.round((total / maxScore) * 100) : 0;
+                });
+                setResult((p) => ({ ...p, methodScores: ms }));
+                setPhase("reflect");
+              }}>Reflect</Btn>
             </div>
           </>
         )}
@@ -228,15 +245,14 @@ export default function ValuesLed({ options, result, setResult, onComplete, onBa
                   </FourAcesCard>
                 ))}
               </div>
-              <p className="text-[13px] text-4a-text-sec font-medium mb-1.5 font-4a-sans">What did you realize about this decision?</p>
-              <textarea
-                value={result.takeaway}
-                onChange={(e) => setResult((p) => ({ ...p, takeaway: e.target.value }))}
-                placeholder="What did your values tell you?"
-                className="w-full min-h-[80px] p-3.5 rounded-[10px] border-[1.5px] border-4a-border text-sm font-4a-sans resize-y box-border bg-4a-card text-4a-text"
-              />
-              <div className="text-center mt-6">
+              <div className="text-center mt-6 flex flex-col items-center gap-3">
                 <Btn onClick={onComplete}>Continue</Btn>
+                <button
+                  onClick={onWantMoreClarity}
+                  className="bg-none border-none text-4a-text-sec text-sm cursor-pointer font-4a-sans underline decoration-4a-border underline-offset-[3px]"
+                >
+                  Want more clarity?
+                </button>
               </div>
             </>
           );

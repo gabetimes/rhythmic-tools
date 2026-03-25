@@ -12,10 +12,11 @@ interface FlipACoinProps {
   result: MethodResult;
   setResult: React.Dispatch<React.SetStateAction<MethodResult>>;
   onComplete: () => void;
+  onWantMoreClarity: () => void;
   onBack: () => void;
 }
 
-export default function FlipACoin({ options, result, setResult, onComplete, onBack }: FlipACoinProps) {
+export default function FlipACoin({ options, result, setResult, onComplete, onWantMoreClarity, onBack }: FlipACoinProps) {
   const [phase, setPhase] = useState<"ready" | "flipping" | "result" | "reflect">("ready");
   const [flipResult, setFlipResult] = useState("");
   const [hoped, setHoped] = useState("");
@@ -102,15 +103,14 @@ export default function FlipACoin({ options, result, setResult, onComplete, onBa
                 ? "Sounds like you already knew."
                 : "That feeling of wanting the other option? That's your answer."}
             </p>
-            <p className="text-[13px] text-4a-text-sec font-medium mb-1.5 font-4a-sans">What did you realize about this decision?</p>
-            <textarea
-              value={result.takeaway}
-              onChange={(e) => setResult((p) => ({ ...p, takeaway: e.target.value }))}
-              placeholder="What did you learn from this?"
-              className="w-full min-h-[80px] p-3.5 rounded-[10px] border-[1.5px] border-4a-border text-sm font-4a-sans resize-y box-border bg-4a-card text-4a-text"
-            />
-            <div className="mt-6">
+            <div className="mt-6 flex flex-col items-center gap-3">
               <Btn onClick={onComplete}>Continue</Btn>
+              <button
+                onClick={onWantMoreClarity}
+                className="bg-none border-none text-4a-text-sec text-sm cursor-pointer font-4a-sans underline decoration-4a-border underline-offset-[3px]"
+              >
+                Want more clarity?
+              </button>
             </div>
           </div>
         )}

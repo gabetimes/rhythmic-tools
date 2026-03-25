@@ -1,4 +1,4 @@
-import { METHODS, type MethodId, type MethodResult } from "@/data/four-aces-constants";
+import { METHODS, type MethodId, type MethodResult, type ClarityAnswers } from "@/data/four-aces-constants";
 import Btn from "./shared/Btn";
 import FourAcesCard from "./shared/FourAcesCard";
 import Wrap from "./shared/Wrap";
@@ -8,10 +8,13 @@ interface SaveDecisionProps {
   setTitle: (title: string) => void;
   result: MethodResult;
   method: MethodId;
+  clarityAnswers: ClarityAnswers;
+  options: string[];
   onSave: () => void;
 }
 
-export default function SaveDecision({ title, setTitle, result, method, onSave }: SaveDecisionProps) {
+export default function SaveDecision({ title, setTitle, result, method, clarityAnswers, options, onSave }: SaveDecisionProps) {
+  const hasClarityAnswers = Object.keys(clarityAnswers).length > 0;
   return (
     <div className="pt-[60px]">
       <Wrap>
@@ -41,6 +44,20 @@ export default function SaveDecision({ title, setTitle, result, method, onSave }
           )}
           {result.takeaway && (
             <div className="text-[13px] text-4a-text-sec">"{result.takeaway}"</div>
+          )}
+          {hasClarityAnswers && (
+            <div className="mt-2 pt-2 border-t border-4a-border">
+              <div className="text-[11px] text-4a-text-sec font-medium mb-1">Clarity questions completed</div>
+              {options.map((opt, i) => {
+                const a = clarityAnswers[i];
+                if (!a) return null;
+                return (
+                  <div key={i} className="text-[12px] text-4a-text-sec">
+                    {opt}: gain {a.gain}, cost {a.cost}, self-respect {a.selfRespect}
+                  </div>
+                );
+              })}
+            </div>
           )}
         </FourAcesCard>
         <div className="text-center">

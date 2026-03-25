@@ -12,6 +12,7 @@ interface ProsConsProps {
   result: MethodResult;
   setResult: React.Dispatch<React.SetStateAction<MethodResult>>;
   onComplete: () => void;
+  onWantMoreClarity: () => void;
   onBack: () => void;
 }
 
@@ -20,7 +21,7 @@ interface ProsConsData {
   cons: string[];
 }
 
-export default function ProsCons({ options, result, setResult, onComplete, onBack }: ProsConsProps) {
+export default function ProsCons({ options, result, setResult, onComplete, onWantMoreClarity, onBack }: ProsConsProps) {
   const [activeIdx, setActiveIdx] = useState(0);
   const [data, setData] = useState<ProsConsData[]>(() => options.map(() => ({ pros: [""], cons: [""] })));
   const [phase, setPhase] = useState<"edit" | "reflect">("edit");
@@ -215,6 +216,19 @@ export default function ProsCons({ options, result, setResult, onComplete, onBac
                   }
                   setNudge(null);
                   track4AMethodResultRevealed("Pros & Cons");
+                  // Compute method scores: net pros - cons per option, normalized to 0-100
+                  const nets = options.map((_, i) => {
+                    const prosCount = data[i].pros.filter((e) => e.trim()).length;
+                    const allConsCount = getAllCons(i).length;
+                    return prosCount - allConsCount;
+                  });
+                  const minNet = Math.min(...nets);
+                  const maxNet = Math.max(...nets);
+                  const scores: Record<number, number> = {};
+                  options.forEach((_, i) => {
+                    scores[i] = maxNet === minNet ? 50 : Math.round(((nets[i] - minNet) / (maxNet - minNet)) * 100);
+                  });
+                  setResult((p) => ({ ...p, methodScores: scores }));
                   setPhase("reflect");
                 }}
               >
@@ -268,15 +282,14 @@ export default function ProsCons({ options, result, setResult, onComplete, onBac
                 </FourAcesCard>
               ))}
             </div>
-            <p className="text-[13px] text-4a-text-sec font-medium mb-1.5 font-4a-sans">What did you realize about this decision?</p>
-            <textarea
-              value={result.takeaway}
-              onChange={(e) => setResult((p) => ({ ...p, takeaway: e.target.value }))}
-              placeholder="What became clearer?"
-              className="w-full min-h-[80px] p-3.5 rounded-[10px] border-[1.5px] border-4a-border text-sm font-4a-sans resize-y box-border bg-4a-card text-4a-text"
-            />
-            <div className="text-center mt-6">
+            <div className="text-center mt-6 flex flex-col items-center gap-3">
               <Btn onClick={onComplete}>Continue</Btn>
+              <button
+                onClick={onWantMoreClarity}
+                className="bg-none border-none text-4a-text-sec text-sm cursor-pointer font-4a-sans underline decoration-4a-border underline-offset-[3px]"
+              >
+                Want more clarity?
+              </button>
             </div>
           </>
         )}

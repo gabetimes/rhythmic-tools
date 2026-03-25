@@ -51,9 +51,19 @@ export interface IntakeState {
   decisionType: string | null;
 }
 
+export interface ClarityAnswer {
+  gain: number;        // 1-5
+  cost: number;        // 1-5
+  selfRespect: number; // 1-5
+}
+
+export type ClarityAnswers = Record<number, ClarityAnswer>; // keyed by option index
+export type MethodScores = Record<number, number>;           // optionIndex → 0-100
+
 export interface MethodResult {
   chosen: string;
   takeaway: string;
+  methodScores?: MethodScores;
 }
 
 export interface SavedDecision {
@@ -66,4 +76,6 @@ export interface SavedDecision {
   clarity: number;
   decisionType: string;
   options: string[];
+  clarityAnswers?: ClarityAnswers;
+  cumulativeScores?: Record<number, number>;
 }
