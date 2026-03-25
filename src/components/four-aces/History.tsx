@@ -52,6 +52,20 @@ export default function History({ decisions, onBack, onNew }: HistoryProps) {
                 {d.chosen && (
                   <div className="text-[13px] font-semibold mt-1">→ {d.chosen}</div>
                 )}
+                {d.clarityAnswers && (
+                  <div className="mt-2 pt-2 border-t border-4a-border">
+                    <div className="text-[11px] text-4a-text-sec font-medium mb-0.5">Clarity deep-dive</div>
+                    {d.options.map((opt, i) => {
+                      const a = d.clarityAnswers?.[i];
+                      if (!a) return null;
+                      return (
+                        <div key={i} className="text-[12px] text-4a-text-sec">
+                          {opt}: gain {a.gain}, cost {a.cost}, self-respect {a.selfRespect}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </FourAcesCard>
             ))}
           </div>

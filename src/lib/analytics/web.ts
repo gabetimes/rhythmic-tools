@@ -256,3 +256,28 @@ export function track4ASeeMoreMethodsClicked() {
 export function track4AClarityRatingSubmitted(clarityRating: number, methodName?: string) {
   trackEvent("4a_clarity_rating_submitted", { clarity_rating: clarityRating, method_name: methodName });
 }
+
+export function track4AWantMoreClarityClicked(methodName: string) {
+  trackEvent("4a_want_more_clarity_clicked", { method_name: methodName });
+}
+
+export function track4AClarityQuestionsCompleted(
+  methodName: string,
+  options: string[],
+  clarityAnswers: Record<number, { gain: number; cost: number; selfRespect: number }>,
+) {
+  const params: EventProperties = {
+    method_name: methodName,
+    options_count: options.length,
+  };
+  options.forEach((option, i) => {
+    const answer = clarityAnswers[i];
+    if (answer) {
+      params[`option_${i + 1}_name`] = option;
+      params[`option_${i + 1}_gain`] = answer.gain;
+      params[`option_${i + 1}_cost`] = answer.cost;
+      params[`option_${i + 1}_self_respect`] = answer.selfRespect;
+    }
+  });
+  trackEvent("4a_clarity_questions_completed", params);
+}

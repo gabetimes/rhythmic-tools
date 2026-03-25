@@ -11,11 +11,12 @@ interface MethodRouterProps {
   result: MethodResult;
   setResult: React.Dispatch<React.SetStateAction<MethodResult>>;
   onComplete: () => void;
+  onWantMoreClarity: () => void;
   onBack: () => void;
 }
 
-export default function MethodRouter({ method, options, result, setResult, onComplete, onBack }: MethodRouterProps) {
-  const props = { options, result, setResult, onComplete, onBack };
+export default function MethodRouter({ method, options, result, setResult, onComplete, onWantMoreClarity, onBack }: MethodRouterProps) {
+  const props = { options, result, setResult, onComplete, onWantMoreClarity, onBack };
 
   switch (method) {
     case "flip":

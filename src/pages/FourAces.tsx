@@ -7,6 +7,7 @@ import {
   type IntakeState,
   type MethodResult,
   type SavedDecision,
+  type ClarityAnswers,
 } from "@/data/four-aces-constants";
 import { loadDecisions, saveDecisions } from "@/lib/four-aces-storage";
 import { getRecommendations } from "@/lib/four-aces-recommendations";
@@ -18,7 +19,10 @@ import {
   track4AMethodCompleted,
   track4AOptionSaved,
   track4AClarityRatingSubmitted,
+  track4AWantMoreClarityClicked,
+  track4AClarityQuestionsCompleted,
 } from "@/lib/analytics/web";
+import { computeCumulativeScores } from "@/lib/four-aces-scoring";
 
 import Landing from "@/components/four-aces/Landing";
 import IntakeStep1 from "@/components/four-aces/IntakeStep1";
@@ -33,6 +37,7 @@ import SaveDecision from "@/components/four-aces/SaveDecision";
 import SavedConfirm from "@/components/four-aces/SavedConfirm";
 import History from "@/components/four-aces/History";
 import QuickFlip from "@/components/four-aces/QuickFlip";
+import ClarityQuestions from "@/components/four-aces/ClarityQuestions";
 
 type Screen =
   | "landing"
@@ -47,7 +52,8 @@ type Screen =
   | "save"
   | "saved-confirm"
   | "history"
-  | "quick-flip";
+  | "quick-flip"
+  | "clarity-questions";
 
 function screenFromPath(pathname: string): Screen {
   if (pathname === "/4aces/history") return "history";
@@ -72,6 +78,7 @@ export default function FourAces() {
   const [methodResult, setMethodResult] = useState<MethodResult>({ chosen: "", takeaway: "" });
   const [clarity, setClarity] = useState(0);
   const [decisionTitle, setDecisionTitle] = useState("");
+  const [clarityAnswers, setClarityAnswers] = useState<ClarityAnswers>({});
   const [saved, setSaved] = useState<SavedDecision[]>([]);
 
   useEffect(() => {
@@ -113,6 +120,7 @@ export default function FourAces() {
     setMethodResult({ chosen: "", takeaway: "" });
     setClarity(0);
     setDecisionTitle("");
+    setClarityAnswers({});
     setCurrentMethod("flip");
     setIntake({ hasOptions: true, slider: 0, decisionType: null });
     goTo("quick-flip");
@@ -125,6 +133,7 @@ export default function FourAces() {
     setMethodResult({ chosen: "", takeaway: "" });
     setClarity(0);
     setDecisionTitle("");
+    setClarityAnswers({});
     setPendingMethod(null);
     goTo("intake-1");
   };
@@ -136,6 +145,7 @@ export default function FourAces() {
     setMethodResult({ chosen: "", takeaway: "" });
     setClarity(0);
     setDecisionTitle("");
+    setClarityAnswers({});
     setPendingMethod(methodId);
     goTo("intake-1");
   };
@@ -172,7 +182,22 @@ export default function FourAces() {
     goTo("save");
   };
 
+  const goToClarityQuestions = () => {
+    track4AWantMoreClarityClicked(METHODS[currentMethod].name);
+    goTo("clarity-questions");
+  };
+
+  const completeClarityQuestions = () => {
+    track4AClarityQuestionsCompleted(
+      METHODS[currentMethod].name,
+      options,
+      clarityAnswers,
+    );
+    goTo("clarity");
+  };
+
   const saveDec = () => {
+    const hasClarityAnswers = Object.keys(clarityAnswers).length > 0;
     const dec: SavedDecision = {
       id: Date.now(),
       title: decisionTitle || "Untitled Decision",
@@ -183,6 +208,10 @@ export default function FourAces() {
       clarity,
       decisionType: DECISION_TYPES.find((d) => d.id === intake.decisionType)?.label ?? "",
       options: [...options],
+      ...(hasClarityAnswers && { clarityAnswers: { ...clarityAnswers } }),
+      ...(hasClarityAnswers && {
+        cumulativeScores: computeCumulativeScores(currentMethod, methodResult.methodScores, clarityAnswers, options.length),
+      }),
     };
     const next = [dec, ...saved];
     setSaved(next);
@@ -256,11 +285,35 @@ export default function FourAces() {
           result={methodResult}
           setResult={setMethodResult}
           onComplete={completeMethod}
+          onWantMoreClarity={goToClarityQuestions}
           onBack={() => goTo("recommendations")}
         />
       );
+    case "clarity-questions":
+      return (
+        <ClarityQuestions
+          options={options}
+          clarityAnswers={clarityAnswers}
+          setClarityAnswers={setClarityAnswers}
+          methodResult={methodResult}
+          setMethodResult={setMethodResult}
+          currentMethod={currentMethod}
+          onComplete={completeClarityQuestions}
+          onBack={() => goTo("method")}
+        />
+      );
     case "clarity":
-      return <ClarityRating clarity={clarity} setClarity={setClarity} onNext={submitClarity} onTryAnother={() => goTo("browse")} />;
+      return (
+        <ClarityRating
+          clarity={clarity}
+          setClarity={setClarity}
+          result={methodResult}
+          setResult={setMethodResult}
+          onNext={submitClarity}
+          onTryAnother={() => goTo("browse")}
+          onWantMoreClarity={goToClarityQuestions}
+        />
+      );
     case "save":
       return (
         <SaveDecision
@@ -268,6 +321,8 @@ export default function FourAces() {
           setTitle={setDecisionTitle}
           result={methodResult}
           method={currentMethod}
+          clarityAnswers={clarityAnswers}
+          options={options}
           onSave={saveDec}
         />
       );

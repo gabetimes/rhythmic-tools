@@ -12,10 +12,11 @@ interface CriteriaMapProps {
   result: MethodResult;
   setResult: React.Dispatch<React.SetStateAction<MethodResult>>;
   onComplete: () => void;
+  onWantMoreClarity: () => void;
   onBack: () => void;
 }
 
-export default function CriteriaMap({ options, result, setResult, onComplete, onBack }: CriteriaMapProps) {
+export default function CriteriaMap({ options, result, setResult, onComplete, onWantMoreClarity, onBack }: CriteriaMapProps) {
   const [phase, setPhase] = useState<"criteria" | "weight" | "rate" | "results">("criteria");
   const [criteria, setCriteria] = useState(["", ""]);
   const [weights, setWeights] = useState<Record<number, number>>({});
@@ -168,7 +169,13 @@ export default function CriteriaMap({ options, result, setResult, onComplete, on
               ))}
             </div>
             <div className="text-center mt-6">
-              <Btn onClick={() => { track4AMethodResultRevealed("Criteria Map"); setPhase("results"); }}>See results</Btn>
+              <Btn onClick={() => {
+                track4AMethodResultRevealed("Criteria Map");
+                // Store method scores (already 0-100)
+                const ms = calcScores();
+                setResult((p) => ({ ...p, methodScores: ms }));
+                setPhase("results");
+              }}>See results</Btn>
             </div>
           </>
         )}
@@ -222,15 +229,14 @@ export default function CriteriaMap({ options, result, setResult, onComplete, on
                   </FourAcesCard>
                 ))}
               </div>
-              <p className="text-[13px] text-4a-text-sec font-medium mb-1.5 font-4a-sans">What did you realize about this decision?</p>
-              <textarea
-                value={result.takeaway}
-                onChange={(e) => setResult((p) => ({ ...p, takeaway: e.target.value }))}
-                placeholder="What did the numbers confirm or challenge?"
-                className="w-full min-h-[80px] p-3.5 rounded-[10px] border-[1.5px] border-4a-border text-sm font-4a-sans resize-y box-border bg-4a-card text-4a-text"
-              />
-              <div className="text-center mt-6">
+              <div className="text-center mt-6 flex flex-col items-center gap-3">
                 <Btn onClick={onComplete}>Continue</Btn>
+                <button
+                  onClick={onWantMoreClarity}
+                  className="bg-none border-none text-4a-text-sec text-sm cursor-pointer font-4a-sans underline decoration-4a-border underline-offset-[3px]"
+                >
+                  Want more clarity?
+                </button>
               </div>
             </>
           );
